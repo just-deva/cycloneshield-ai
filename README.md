@@ -61,3 +61,32 @@ cycloneshield-ai/
 │   └── requirements.txt        # Python dependency manifest
 ├── .gitignore                  # Exclusion patterns for keys, cache, build folders
 └── README.md                   # Project documentation
+```
+
+🚦 Local Development & Setup
+Prerequisites
+Node.js: v18+
+
+Python: v3.10+
+
+Google AI Studio: Gemini API Key
+
+---
+1. Backend Setup
+# Navigate to backend directory
+cd backend
+
+# Create and activate Python virtual environment
+python -m venv venv
+# On Windows Command Prompt:
+venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set Gemini API Key
+set GEMINI_API_KEY="your_actual_gemini_api_key"
+
+# Start FastAPI development server
+uvicorn main:app --reload --port 8000
+
