@@ -72,21 +72,43 @@ Python: v3.10+
 Google AI Studio: Gemini API Key
 
 ---
-1. Backend Setup
-# Navigate to backend directory
-cd backend
+# 1. Clone the repository
+git clone [https://github.com/just-deva/cycloneshield-ai.git](https://github.com/just-deva/cycloneshield-ai.git)
+cd cycloneshield-ai
 
-# Create and activate Python virtual environment
+# 2. Setup and launch Python FastAPI Backend
+cd backend
 python -m venv venv
+
 # On Windows Command Prompt:
 venv\Scripts\activate
+# On Linux/macOS:
+# source venv/bin/activate
 
-# Install dependencies
 pip install -r requirements.txt
-
-# Set Gemini API Key
 set GEMINI_API_KEY="your_actual_gemini_api_key"
+uvicorn main:app --reload --port 8000 &
 
-# Start FastAPI development server
-uvicorn main:app --reload --port 8000
+# 3. Setup and launch React Frontend
+cd ../frontend
+npm install
+npm start
 
+Once running, access:
+
+Frontend Application: http://localhost:3000
+
+Backend API Documentation: http://localhost:8000/docs
+
+# Step 1: Deploy FastAPI Backend Microservice to Google Cloud Run
+cd backend
+gcloud run deploy cycloneshield-api \
+  --source . \
+  --region asia-south1 \
+  --allow-unauthenticated \
+  --set-env-vars GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
+
+# Step 2: Build & Deploy React Static Frontend to Firebase Hosting
+cd ../frontend
+npm run build
+npx firebase-tools deploy --only hosting
