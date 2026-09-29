@@ -1,0 +1,25 @@
+{
+  "cyclone_track": [
+    {"step":"T-24h","lat":16.95,"lng":84.05,"wind_speed_kmh":70,"surge_height_m":0.8,"rainfall_24h_mm":80,"timestamp":"2026-10-01T00:00:00+05:30"},
+    {"step":"T-12h","lat":17.24,"lng":83.72,"wind_speed_kmh":92,"surge_height_m":1.3,"rainfall_24h_mm":135,"timestamp":"2026-10-01T12:00:00+05:30"},
+    {"step":"T-6h","lat":17.51,"lng":83.38,"wind_speed_kmh":112,"surge_height_m":1.9,"rainfall_24h_mm":178,"timestamp":"2026-10-01T18:00:00+05:30"},
+    {"step":"Landfall","lat":17.69,"lng":83.23,"wind_speed_kmh":128,"surge_height_m":2.4,"rainfall_24h_mm":220,"timestamp":"2026-10-02T00:00:00+05:30"}
+  ],
+  "wards": [
+    {"id":"ward-14","name":"Ward 14 MVP Colony","geojson":{"type":"Polygon","coordinates":[[[83.315,17.755],[83.338,17.755],[83.338,17.773],[83.315,17.773],[83.315,17.755]]]},"population":42000,"elevation_m":10,"non_pucca_housing_pct":18,"critical_assets":{"hospitals":["MVP Community Health Centre"],"power_substations":["MVP 33/11 kV Substation"]}},
+    {"id":"ward-15","name":"Ward 15 Beach Road","geojson":{"type":"Polygon","coordinates":[[[83.322,17.704],[83.344,17.704],[83.344,17.724],[83.322,17.724],[83.322,17.704]]]},"population":31000,"elevation_m":4,"non_pucca_housing_pct":22,"critical_assets":{"hospitals":[],"power_substations":["Beach Road Distribution Station"]}},
+    {"id":"ward-16","name":"Ward 16 Maharanipeta","geojson":{"type":"Polygon","coordinates":[[[83.300,17.704],[83.322,17.704],[83.322,17.724],[83.300,17.724],[83.300,17.704]]]},"population":36500,"elevation_m":7,"non_pucca_housing_pct":16,"critical_assets":{"hospitals":["King George Hospital","Andhra Medical College"],"power_substations":[]}},
+    {"id":"ward-17","name":"Ward 17 Jagadamba","geojson":{"type":"Polygon","coordinates":[[[83.286,17.714],[83.306,17.714],[83.306,17.735],[83.286,17.735],[83.286,17.714]]]},"population":48000,"elevation_m":13,"non_pucca_housing_pct":27,"critical_assets":{"hospitals":[],"power_substations":["Jagadamba Feeder Station"]}},
+    {"id":"ward-18","name":"Ward 18 Gajuwaka","geojson":{"type":"Polygon","coordinates":[[[83.190,17.680],[83.220,17.680],[83.220,17.705],[83.190,17.705],[83.190,17.680]]]},"population":57500,"elevation_m":9,"non_pucca_housing_pct":36,"critical_assets":{"hospitals":["Gajuwaka Area Hospital"],"power_substations":["Gajuwaka 132/33 kV Substation"]}}
+  ],
+  "shelters": [
+    {"id":"shelter-mvp","name":"MVP Community Cyclone Shelter","lat":17.765,"lng":83.326,"capacity":1200,"current_occupancy":380,"road_node":"mvp"},
+    {"id":"shelter-gym","name":"Port Indoor Stadium Shelter","lat":17.715,"lng":83.292,"capacity":1800,"current_occupancy":1020,"road_node":"jagadamba"},
+    {"id":"shelter-gajuwaka","name":"Gajuwaka Municipal School Shelter","lat":17.692,"lng":83.205,"capacity":1500,"current_occupancy":640,"road_node":"gajuwaka"},
+    {"id":"shelter-pendurthi","name":"Pendurthi Relief Centre","lat":17.780,"lng":83.275,"capacity":2000,"current_occupancy":300,"road_node":"pendurthi"}
+  ],
+  "road_network": {
+    "nodes": [{"id":"mvp","lat":17.764,"lng":83.327},{"id":"beach","lat":17.714,"lng":83.333},{"id":"maharanipeta","lat":17.714,"lng":83.311},{"id":"jagadamba","lat":17.724,"lng":83.296},{"id":"nh16","lat":17.727,"lng":83.263},{"id":"gajuwaka","lat":17.692,"lng":83.205},{"id":"pendurthi","lat":17.780,"lng":83.275}],
+    "edges": [{"id":"beach-road","name":"Beach Road","from":"mvp","to":"beach","travel_time_min":7},{"id":"mvp-main-road","name":"MVP Colony Main Road","from":"mvp","to":"maharanipeta","travel_time_min":9},{"id":"waltair-main-road","name":"Waltair Main Road","from":"maharanipeta","to":"jagadamba","travel_time_min":6},{"id":"asylum-road","name":"Asilmetta Connector","from":"jagadamba","to":"nh16","travel_time_min":8},{"id":"nh16-south","name":"NH16","from":"nh16","to":"gajuwaka","travel_time_min":17},{"id":"nh16-north","name":"NH16","from":"nh16","to":"pendurthi","travel_time_min":12},{"id":"harbour-road","name":"Harbour Road","from":"beach","to":"maharanipeta","travel_time_min":5},{"id":"gajuwaka-link","name":"Gajuwaka Link Road","from":"jagadamba","to":"gajuwaka","travel_time_min":25}]
+  }
+}

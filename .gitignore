@@ -1,0 +1,25 @@
+# Cache and temporary files
+.npm-cache/
+*_cacache/
+.firebase/
+node_modules/
+build/
+dist/
+
+# Python virtual environments & cache
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Secrets & Environment Variables
+.env
+*.env
+.env.local
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
