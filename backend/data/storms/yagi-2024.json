@@ -1,0 +1,455 @@
+{
+ "id": "yagi-2024",
+ "name": "Yagi",
+ "basin": "WP",
+ "season": 2024,
+ "source": "JTWC best track via UCAR RAL (https://hurricanes.ral.ucar.edu/repository/data/bdecks_open/2024/bwp122024.dat)",
+ "authority": "JTWC guidance (not an official warning)",
+ "wind_avg_period_min": 1,
+ "kind": "replay",
+ "summary": "Typhoon Yagi (Sep 2024) - West Pacific system that hit northern Vietnam; used to show the pipeline is basin-agnostic.",
+ "fixes": [
+  {
+   "t": "2024-09-01T12:00:00Z",
+   "lat": 13.5,
+   "lon": 124.7,
+   "vmax_kt": 30.0,
+   "mslp_hpa": 999.0,
+   "poci_hpa": 1007.0,
+   "rmw_nm": 40.0,
+   "r34_nm": null,
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-01T18:00:00Z",
+   "lat": 14.6,
+   "lon": 123.2,
+   "vmax_kt": 35.0,
+   "mslp_hpa": 996.0,
+   "poci_hpa": 1005.0,
+   "rmw_nm": 25.0,
+   "r34_nm": [
+    50.0,
+    45.0,
+    45.0,
+    45.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-02T00:00:00Z",
+   "lat": 15.2,
+   "lon": 122.6,
+   "vmax_kt": 40.0,
+   "mslp_hpa": 995.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 25.0,
+   "r34_nm": [
+    60.0,
+    50.0,
+    50.0,
+    50.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-02T06:00:00Z",
+   "lat": 16.4,
+   "lon": 122.3,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 996.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 20.0,
+   "r34_nm": [
+    50.0,
+    60.0,
+    60.0,
+    30.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-02T12:00:00Z",
+   "lat": 17.2,
+   "lon": 122.0,
+   "vmax_kt": 40.0,
+   "mslp_hpa": 996.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 20.0,
+   "r34_nm": [
+    50.0,
+    60.0,
+    60.0,
+    30.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-02T18:00:00Z",
+   "lat": 17.9,
+   "lon": 120.9,
+   "vmax_kt": 35.0,
+   "mslp_hpa": 1000.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 20.0,
+   "r34_nm": [
+    80.0,
+    35.0,
+    90.0,
+    60.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-03T00:00:00Z",
+   "lat": 18.3,
+   "lon": 119.5,
+   "vmax_kt": 40.0,
+   "mslp_hpa": 999.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 20.0,
+   "r34_nm": [
+    80.0,
+    65.0,
+    100.0,
+    75.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-03T06:00:00Z",
+   "lat": 18.5,
+   "lon": 119.1,
+   "vmax_kt": 40.0,
+   "mslp_hpa": 998.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 20.0,
+   "r34_nm": [
+    60.0,
+    75.0,
+    85.0,
+    80.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-03T12:00:00Z",
+   "lat": 18.8,
+   "lon": 119.0,
+   "vmax_kt": 50.0,
+   "mslp_hpa": 993.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 25.0,
+   "r34_nm": [
+    60.0,
+    75.0,
+    85.0,
+    80.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-03T18:00:00Z",
+   "lat": 18.8,
+   "lon": 118.3,
+   "vmax_kt": 55.0,
+   "mslp_hpa": 987.0,
+   "poci_hpa": 1003.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    75.0,
+    85.0,
+    85.0,
+    85.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-04T00:00:00Z",
+   "lat": 19.1,
+   "lon": 117.7,
+   "vmax_kt": 70.0,
+   "mslp_hpa": 977.0,
+   "poci_hpa": 1003.0,
+   "rmw_nm": 25.0,
+   "r34_nm": [
+    85.0,
+    90.0,
+    95.0,
+    90.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-04T06:00:00Z",
+   "lat": 19.2,
+   "lon": 117.4,
+   "vmax_kt": 80.0,
+   "mslp_hpa": 977.0,
+   "poci_hpa": 1001.0,
+   "rmw_nm": 17.0,
+   "r34_nm": [
+    80.0,
+    90.0,
+    95.0,
+    85.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-04T12:00:00Z",
+   "lat": 19.2,
+   "lon": 116.9,
+   "vmax_kt": 110.0,
+   "mslp_hpa": 968.0,
+   "poci_hpa": 1000.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    80.0,
+    105.0,
+    120.0,
+    85.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-04T18:00:00Z",
+   "lat": 19.2,
+   "lon": 116.3,
+   "vmax_kt": 120.0,
+   "mslp_hpa": 932.0,
+   "poci_hpa": 1000.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    130.0,
+    100.0,
+    130.0,
+    140.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-05T00:00:00Z",
+   "lat": 19.1,
+   "lon": 115.8,
+   "vmax_kt": 130.0,
+   "mslp_hpa": 922.0,
+   "poci_hpa": 1000.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    130.0,
+    100.0,
+    130.0,
+    140.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-05T06:00:00Z",
+   "lat": 19.2,
+   "lon": 115.1,
+   "vmax_kt": 125.0,
+   "mslp_hpa": 928.0,
+   "poci_hpa": 1001.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    160.0,
+    130.0,
+    115.0,
+    140.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-05T12:00:00Z",
+   "lat": 19.3,
+   "lon": 114.1,
+   "vmax_kt": 125.0,
+   "mslp_hpa": 929.0,
+   "poci_hpa": 1001.0,
+   "rmw_nm": 15.0,
+   "r34_nm": [
+    160.0,
+    130.0,
+    115.0,
+    140.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-05T18:00:00Z",
+   "lat": 19.2,
+   "lon": 113.0,
+   "vmax_kt": 120.0,
+   "mslp_hpa": 934.0,
+   "poci_hpa": 1000.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    180.0,
+    130.0,
+    115.0,
+    160.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-06T00:00:00Z",
+   "lat": 19.2,
+   "lon": 112.2,
+   "vmax_kt": 130.0,
+   "mslp_hpa": 922.0,
+   "poci_hpa": 999.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    180.0,
+    130.0,
+    115.0,
+    160.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-06T06:00:00Z",
+   "lat": 19.7,
+   "lon": 111.3,
+   "vmax_kt": 125.0,
+   "mslp_hpa": 927.0,
+   "poci_hpa": 1000.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    180.0,
+    130.0,
+    115.0,
+    160.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-06T12:00:00Z",
+   "lat": 20.0,
+   "lon": 110.2,
+   "vmax_kt": 120.0,
+   "mslp_hpa": 928.0,
+   "poci_hpa": 1000.0,
+   "rmw_nm": 15.0,
+   "r34_nm": [
+    160.0,
+    160.0,
+    125.0,
+    145.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-06T18:00:00Z",
+   "lat": 20.3,
+   "lon": 109.0,
+   "vmax_kt": 105.0,
+   "mslp_hpa": 937.0,
+   "poci_hpa": 1002.0,
+   "rmw_nm": 15.0,
+   "r34_nm": [
+    140.0,
+    140.0,
+    135.0,
+    155.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-07T00:00:00Z",
+   "lat": 20.3,
+   "lon": 108.2,
+   "vmax_kt": 115.0,
+   "mslp_hpa": 933.0,
+   "poci_hpa": 1002.0,
+   "rmw_nm": 15.0,
+   "r34_nm": [
+    130.0,
+    120.0,
+    125.0,
+    125.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-07T06:00:00Z",
+   "lat": 21.0,
+   "lon": 106.9,
+   "vmax_kt": 110.0,
+   "mslp_hpa": 942.0,
+   "poci_hpa": 1002.0,
+   "rmw_nm": 15.0,
+   "r34_nm": [
+    150.0,
+    145.0,
+    155.0,
+    135.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-07T12:00:00Z",
+   "lat": 21.0,
+   "lon": 105.9,
+   "vmax_kt": 75.0,
+   "mslp_hpa": 970.0,
+   "poci_hpa": 1002.0,
+   "rmw_nm": 25.0,
+   "r34_nm": [
+    120.0,
+    125.0,
+    135.0,
+    75.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2024-09-07T18:00:00Z",
+   "lat": 21.2,
+   "lon": 105.1,
+   "vmax_kt": 60.0,
+   "mslp_hpa": 986.0,
+   "poci_hpa": 1003.0,
+   "rmw_nm": 25.0,
+   "r34_nm": [
+    50.0,
+    125.0,
+    45.0,
+    50.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  }
+ ],
+ "forecast": [],
+ "reference": {
+  "note": "Cross-border demonstration only; no calibration data attached.",
+  "confidence": "n/a"
+ }
+}

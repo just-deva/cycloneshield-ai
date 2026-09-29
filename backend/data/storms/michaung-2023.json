@@ -1,0 +1,174 @@
+{
+ "id": "michaung-2023",
+ "name": "Michaung",
+ "basin": "IO",
+ "season": 2023,
+ "source": "JTWC best track via UCAR RAL (https://hurricanes.ral.ucar.edu/repository/data/bdecks_open/2023/bio082023.dat)",
+ "authority": "JTWC guidance (not an official warning)",
+ "wind_avg_period_min": 1,
+ "kind": "replay",
+ "summary": "Severe Cyclonic Storm; rainfall-dominated impact on Chennai and coastal Andhra Pradesh, Dec 2023.",
+ "fixes": [
+  {
+   "t": "2023-12-03T00:00:00Z",
+   "lat": 11.5,
+   "lon": 82.5,
+   "vmax_kt": 35.0,
+   "mslp_hpa": 1001.0,
+   "poci_hpa": 1007.0,
+   "rmw_nm": 55.0,
+   "r34_nm": [
+    50.0,
+    55.0,
+    45.0,
+    30.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2023-12-03T06:00:00Z",
+   "lat": 11.8,
+   "lon": 82.7,
+   "vmax_kt": 35.0,
+   "mslp_hpa": 1002.0,
+   "poci_hpa": 1009.0,
+   "rmw_nm": 55.0,
+   "r34_nm": [
+    50.0,
+    55.0,
+    45.0,
+    30.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2023-12-03T12:00:00Z",
+   "lat": 12.4,
+   "lon": 82.5,
+   "vmax_kt": 40.0,
+   "mslp_hpa": 999.0,
+   "poci_hpa": 1007.0,
+   "rmw_nm": 50.0,
+   "r34_nm": [
+    100.0,
+    70.0,
+    45.0,
+    80.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2023-12-03T18:00:00Z",
+   "lat": 12.9,
+   "lon": 81.8,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 996.0,
+   "poci_hpa": 1007.0,
+   "rmw_nm": 50.0,
+   "r34_nm": [
+    100.0,
+    70.0,
+    45.0,
+    80.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2023-12-04T00:00:00Z",
+   "lat": 13.5,
+   "lon": 81.2,
+   "vmax_kt": 55.0,
+   "mslp_hpa": 990.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 50.0,
+   "r34_nm": [
+    100.0,
+    70.0,
+    45.0,
+    80.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2023-12-04T06:00:00Z",
+   "lat": 13.4,
+   "lon": 81.1,
+   "vmax_kt": 55.0,
+   "mslp_hpa": 991.0,
+   "poci_hpa": 1007.0,
+   "rmw_nm": 35.0,
+   "r34_nm": [
+    100.0,
+    70.0,
+    45.0,
+    80.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2023-12-04T12:00:00Z",
+   "lat": 13.8,
+   "lon": 80.8,
+   "vmax_kt": 60.0,
+   "mslp_hpa": 987.0,
+   "poci_hpa": 1007.0,
+   "rmw_nm": 25.0,
+   "r34_nm": [
+    155.0,
+    100.0,
+    75.0,
+    110.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2023-12-04T18:00:00Z",
+   "lat": 14.3,
+   "lon": 80.1,
+   "vmax_kt": 60.0,
+   "mslp_hpa": 988.0,
+   "poci_hpa": 1007.0,
+   "rmw_nm": 25.0,
+   "r34_nm": [
+    100.0,
+    70.0,
+    45.0,
+    80.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2023-12-05T00:00:00Z",
+   "lat": 14.7,
+   "lon": 80.1,
+   "vmax_kt": 60.0,
+   "mslp_hpa": 987.0,
+   "poci_hpa": 1007.0,
+   "rmw_nm": 25.0,
+   "r34_nm": [
+    100.0,
+    70.0,
+    45.0,
+    80.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  }
+ ],
+ "forecast": [],
+ "reference": {
+  "observed_rain_mm_24h": 196,
+  "where": "Meenambakkam (Chennai)",
+  "note": "196 mm in 24 h to 05:30 IST on 4 Dec 2023 (IMD press release).",
+  "url": "https://internal.imd.gov.in/press_release/20231204_pr_2671.pdf",
+  "confidence": "medium"
+ }
+}

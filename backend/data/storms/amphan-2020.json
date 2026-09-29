@@ -1,0 +1,342 @@
+{
+ "id": "amphan-2020",
+ "name": "Amphan",
+ "basin": "IO",
+ "season": 2020,
+ "source": "JTWC best track via UCAR RAL (https://hurricanes.ral.ucar.edu/repository/data/bdecks_open/2020/bio012020.dat)",
+ "authority": "JTWC guidance (not an official warning)",
+ "wind_avg_period_min": 1,
+ "kind": "replay",
+ "summary": "Super Cyclonic Storm; landfall in the Sundarbans (West Bengal) on 20 May 2020.",
+ "fixes": [
+  {
+   "t": "2020-05-16T12:00:00Z",
+   "lat": 10.3,
+   "lon": 86.0,
+   "vmax_kt": 40.0,
+   "mslp_hpa": 995.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 50.0,
+   "r34_nm": [
+    50.0,
+    30.0,
+    30.0,
+    65.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-16T18:00:00Z",
+   "lat": 10.9,
+   "lon": 86.3,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 992.0,
+   "poci_hpa": 1003.0,
+   "rmw_nm": 45.0,
+   "r34_nm": [
+    50.0,
+    90.0,
+    105.0,
+    60.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-17T00:00:00Z",
+   "lat": 10.9,
+   "lon": 86.3,
+   "vmax_kt": 60.0,
+   "mslp_hpa": 981.0,
+   "poci_hpa": 1001.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    55.0,
+    95.0,
+    120.0,
+    70.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-17T06:00:00Z",
+   "lat": 11.4,
+   "lon": 86.3,
+   "vmax_kt": 65.0,
+   "mslp_hpa": 980.0,
+   "poci_hpa": 1003.0,
+   "rmw_nm": 15.0,
+   "r34_nm": [
+    70.0,
+    85.0,
+    110.0,
+    45.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-17T12:00:00Z",
+   "lat": 12.0,
+   "lon": 86.4,
+   "vmax_kt": 75.0,
+   "mslp_hpa": 975.0,
+   "poci_hpa": 1003.0,
+   "rmw_nm": 20.0,
+   "r34_nm": [
+    75.0,
+    90.0,
+    120.0,
+    50.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-17T18:00:00Z",
+   "lat": 12.6,
+   "lon": 86.6,
+   "vmax_kt": 115.0,
+   "mslp_hpa": 938.0,
+   "poci_hpa": 1002.0,
+   "rmw_nm": 5.0,
+   "r34_nm": [
+    150.0,
+    140.0,
+    155.0,
+    165.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-18T00:00:00Z",
+   "lat": 13.0,
+   "lon": 86.4,
+   "vmax_kt": 130.0,
+   "mslp_hpa": 919.0,
+   "poci_hpa": 999.0,
+   "rmw_nm": 5.0,
+   "r34_nm": [
+    165.0,
+    155.0,
+    170.0,
+    180.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-18T06:00:00Z",
+   "lat": 13.6,
+   "lon": 86.4,
+   "vmax_kt": 140.0,
+   "mslp_hpa": 911.0,
+   "poci_hpa": 999.0,
+   "rmw_nm": 5.0,
+   "r34_nm": [
+    155.0,
+    125.0,
+    160.0,
+    145.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-18T12:00:00Z",
+   "lat": 14.0,
+   "lon": 86.3,
+   "vmax_kt": 145.0,
+   "mslp_hpa": 901.0,
+   "poci_hpa": 997.0,
+   "rmw_nm": 5.0,
+   "r34_nm": [
+    160.0,
+    135.0,
+    155.0,
+    135.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-18T18:00:00Z",
+   "lat": 14.8,
+   "lon": 86.5,
+   "vmax_kt": 130.0,
+   "mslp_hpa": 921.0,
+   "poci_hpa": 1000.0,
+   "rmw_nm": 5.0,
+   "r34_nm": [
+    160.0,
+    155.0,
+    175.0,
+    180.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-19T00:00:00Z",
+   "lat": 15.6,
+   "lon": 86.8,
+   "vmax_kt": 120.0,
+   "mslp_hpa": 931.0,
+   "poci_hpa": 999.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    165.0,
+    165.0,
+    180.0,
+    185.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-19T06:00:00Z",
+   "lat": 16.5,
+   "lon": 86.8,
+   "vmax_kt": 110.0,
+   "mslp_hpa": 941.0,
+   "poci_hpa": 1000.0,
+   "rmw_nm": 5.0,
+   "r34_nm": [
+    175.0,
+    220.0,
+    145.0,
+    160.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-19T12:00:00Z",
+   "lat": 17.4,
+   "lon": 87.0,
+   "vmax_kt": 100.0,
+   "mslp_hpa": 951.0,
+   "poci_hpa": 1000.0,
+   "rmw_nm": 6.0,
+   "r34_nm": [
+    175.0,
+    200.0,
+    145.0,
+    160.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-19T18:00:00Z",
+   "lat": 18.3,
+   "lon": 86.9,
+   "vmax_kt": 100.0,
+   "mslp_hpa": 950.0,
+   "poci_hpa": 999.0,
+   "rmw_nm": 5.0,
+   "r34_nm": [
+    175.0,
+    200.0,
+    145.0,
+    160.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-20T00:00:00Z",
+   "lat": 19.2,
+   "lon": 87.4,
+   "vmax_kt": 95.0,
+   "mslp_hpa": 951.0,
+   "poci_hpa": 997.0,
+   "rmw_nm": 10.0,
+   "r34_nm": [
+    175.0,
+    200.0,
+    150.0,
+    165.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-20T06:00:00Z",
+   "lat": 20.5,
+   "lon": 87.9,
+   "vmax_kt": 85.0,
+   "mslp_hpa": 961.0,
+   "poci_hpa": 997.0,
+   "rmw_nm": 10.0,
+   "r34_nm": [
+    100.0,
+    150.0,
+    140.0,
+    65.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-20T12:00:00Z",
+   "lat": 22.2,
+   "lon": 88.3,
+   "vmax_kt": 75.0,
+   "mslp_hpa": 968.0,
+   "poci_hpa": 997.0,
+   "rmw_nm": 10.0,
+   "r34_nm": [
+    100.0,
+    140.0,
+    100.0,
+    45.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-20T18:00:00Z",
+   "lat": 23.4,
+   "lon": 89.1,
+   "vmax_kt": 55.0,
+   "mslp_hpa": 984.0,
+   "poci_hpa": 1000.0,
+   "rmw_nm": 10.0,
+   "r34_nm": [
+    95.0,
+    140.0,
+    100.0,
+    40.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2020-05-21T00:00:00Z",
+   "lat": 24.5,
+   "lon": 89.5,
+   "vmax_kt": 40.0,
+   "mslp_hpa": 990.0,
+   "poci_hpa": 1000.0,
+   "rmw_nm": 10.0,
+   "r34_nm": null,
+   "r50_nm": null,
+   "r64_nm": null
+  }
+ ],
+ "forecast": [],
+ "reference": {
+  "observed_surge_m": [
+   4.0,
+   5.0
+  ],
+  "where": "Sundarbans",
+  "note": "IMD warned of 4-5 m above astronomical tide; about 5 m reported in media (low-medium confidence).",
+  "url": "https://weather.com/storms/hurricane/news/2020-05-16-tropical-cyclone-one-amphan-bay-of-bengal-india-bangladesh",
+  "confidence": "low-medium"
+ }
+}

@@ -1,0 +1,115 @@
+{
+  "id": "IN-AP",
+  "name": "Andhra Pradesh - Visakhapatnam coast",
+  "country": "India",
+  "iso3": "IND",
+  "admin_label": "Visakhapatnam district (LGD code to be filled from lgdirectory.gov.in)",
+  "lgd_district_code": null,
+  "focus": {
+    "lat": 17.6868,
+    "lon": 83.2185,
+    "label": "Visakhapatnam"
+  },
+  "bbox": [
+    17.6,
+    83.1,
+    17.92,
+    83.45
+  ],
+  "dem_zoom": 12,
+  "languages": [
+    "English",
+    "Telugu",
+    "Hindi"
+  ],
+  "intensity_scale": "IMD",
+  "authority": {
+    "forecaster": "India Meteorological Department (RSMC New Delhi)",
+    "alert_channel": "NDMA SACHET (CAP) via State Disaster Management Authority",
+    "sdma": "Andhra Pradesh State Disaster Management Authority (APSDMA)"
+  },
+  "recipients": [
+    {
+      "role": "district_collector",
+      "label": "District Collector / DDMA control room"
+    },
+    {
+      "role": "hospital",
+      "label": "Hospital superintendents"
+    },
+    {
+      "role": "power",
+      "label": "Power distribution company (DISCOM)"
+    },
+    {
+      "role": "roads",
+      "label": "Roads & Buildings / NHAI"
+    },
+    {
+      "role": "shelter",
+      "label": "Shelter managers"
+    },
+    {
+      "role": "fisheries",
+      "label": "Fisheries department / coastal police"
+    }
+  ],
+  "tide_default_m": 0.4,
+  "sectors": [
+    {
+      "id": "port-gajuwaka",
+      "lat": 17.685,
+      "lon": 83.29,
+      "width_km": 30,
+      "depth_m": 50,
+      "k": 2.0,
+      "note": "k=2.0 derived by scripts/calibrate.py from Hudhud 2014 (1.2-1.4 m at the Vizag port tide gauge). IN-SAMPLE calibration, n=1; shelf L and h are hand-set."
+    },
+    {
+      "id": "rk-beach",
+      "lat": 17.712,
+      "lon": 83.33,
+      "width_km": 30,
+      "depth_m": 50,
+      "k": 2.0,
+      "note": "k=2.0 derived by scripts/calibrate.py from Hudhud 2014 (1.2-1.4 m at the Vizag port tide gauge). IN-SAMPLE calibration, n=1; shelf L and h are hand-set."
+    },
+    {
+      "id": "rushikonda",
+      "lat": 17.78,
+      "lon": 83.385,
+      "width_km": 30,
+      "depth_m": 50,
+      "k": 2.0,
+      "note": "k=2.0 derived by scripts/calibrate.py from Hudhud 2014 (1.2-1.4 m at the Vizag port tide gauge). IN-SAMPLE calibration, n=1; shelf L and h are hand-set."
+    },
+    {
+      "id": "bheemili",
+      "lat": 17.885,
+      "lon": 83.45,
+      "width_km": 30,
+      "depth_m": 50,
+      "k": 2.0,
+      "note": "k=2.0 derived by scripts/calibrate.py from Hudhud 2014 (1.2-1.4 m at the Vizag port tide gauge). IN-SAMPLE calibration, n=1; shelf L and h are hand-set."
+    }
+  ],
+  "replay_storms": [
+    "hudhud-2014",
+    "montha-2025",
+    "one-26",
+    "michaung-2023"
+  ],
+  "calibration": {
+    "storm": "hudhud-2014",
+    "observed_surge_m": [
+      1.2,
+      1.4
+    ],
+    "where": "Visakhapatnam tide gauge"
+  },
+  "attribution": [
+    "Map data (c) OpenStreetMap contributors (ODbL)",
+    "Elevation: Mapzen/AWS Terrain Tiles (SRTM and others) and NASADEM via Earth Engine",
+    "Storm tracks: JTWC best track via UCAR RAL"
+  ]
+}

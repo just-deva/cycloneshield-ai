@@ -1,0 +1,205 @@
+{
+ "id": "montha-2025",
+ "name": "Montha",
+ "basin": "IO",
+ "season": 2025,
+ "source": "JTWC best track via UCAR RAL (https://hurricanes.ral.ucar.edu/repository/data/bdecks_open/2025/bio032025.dat)",
+ "authority": "JTWC guidance (not an official warning)",
+ "wind_avg_period_min": 1,
+ "kind": "replay",
+ "summary": "Severe Cyclonic Storm; landfall process near Kakinada, Andhra Pradesh, on the evening of 28 Oct 2025.",
+ "fixes": [
+  {
+   "t": "2025-10-26T12:00:00Z",
+   "lat": 11.3,
+   "lon": 86.1,
+   "vmax_kt": 35.0,
+   "mslp_hpa": 998.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 100.0,
+   "r34_nm": [
+    120.0,
+    0.0,
+    115.0,
+    0.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2025-10-26T18:00:00Z",
+   "lat": 11.3,
+   "lon": 85.4,
+   "vmax_kt": 40.0,
+   "mslp_hpa": 998.0,
+   "poci_hpa": 1009.0,
+   "rmw_nm": 40.0,
+   "r34_nm": [
+    0.0,
+    0.0,
+    75.0,
+    0.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2025-10-27T00:00:00Z",
+   "lat": 12.5,
+   "lon": 85.3,
+   "vmax_kt": 40.0,
+   "mslp_hpa": 999.0,
+   "poci_hpa": 1009.0,
+   "rmw_nm": 55.0,
+   "r34_nm": [
+    0.0,
+    100.0,
+    160.0,
+    175.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2025-10-27T06:00:00Z",
+   "lat": 12.7,
+   "lon": 84.3,
+   "vmax_kt": 40.0,
+   "mslp_hpa": 999.0,
+   "poci_hpa": 1009.0,
+   "rmw_nm": 55.0,
+   "r34_nm": [
+    20.0,
+    100.0,
+    145.0,
+    100.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2025-10-27T12:00:00Z",
+   "lat": 13.3,
+   "lon": 84.0,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 996.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 75.0,
+   "r34_nm": [
+    0.0,
+    75.0,
+    75.0,
+    100.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2025-10-27T18:00:00Z",
+   "lat": 14.2,
+   "lon": 83.5,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 995.0,
+   "poci_hpa": 1008.0,
+   "rmw_nm": 55.0,
+   "r34_nm": [
+    90.0,
+    130.0,
+    140.0,
+    60.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2025-10-28T00:00:00Z",
+   "lat": 14.5,
+   "lon": 83.1,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 997.0,
+   "poci_hpa": 1008.0,
+   "rmw_nm": 55.0,
+   "r34_nm": [
+    90.0,
+    130.0,
+    140.0,
+    60.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2025-10-28T06:00:00Z",
+   "lat": 15.2,
+   "lon": 82.6,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 997.0,
+   "poci_hpa": 1008.0,
+   "rmw_nm": 50.0,
+   "r34_nm": [
+    90.0,
+    140.0,
+    140.0,
+    70.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2025-10-28T12:00:00Z",
+   "lat": 15.9,
+   "lon": 82.1,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 995.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 40.0,
+   "r34_nm": [
+    90.0,
+    120.0,
+    120.0,
+    60.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2025-10-28T18:00:00Z",
+   "lat": 16.0,
+   "lon": 81.3,
+   "vmax_kt": 40.0,
+   "mslp_hpa": 998.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 40.0,
+   "r34_nm": [
+    90.0,
+    120.0,
+    120.0,
+    60.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2025-10-29T00:00:00Z",
+   "lat": 16.9,
+   "lon": 81.4,
+   "vmax_kt": 35.0,
+   "mslp_hpa": 1000.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 40.0,
+   "r34_nm": [
+    90.0,
+    120.0,
+    120.0,
+    60.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  }
+ ],
+ "forecast": [],
+ "reference": {
+  "note": "Damage reported in Srikakulam, Vizianagaram, Visakhapatnam, Anakapalle, Konaseema and Kakinada; the exact landfall time (17:30 vs 19:00 IST) and the 76,000-sheltered figure are unverified.",
+  "confidence": "medium"
+ }
+}

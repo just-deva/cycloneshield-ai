@@ -1,0 +1,120 @@
+{
+ "id": "one-26",
+ "name": "One",
+ "basin": "IO",
+ "season": 2026,
+ "source": "JTWC best track via UCAR RAL (https://hurricanes.ral.ucar.edu/repository/data/bdecks_open/2026/bio012026.dat)",
+ "authority": "JTWC guidance (not an official warning)",
+ "wind_avg_period_min": 1,
+ "kind": "replay",
+ "summary": "Bay of Bengal depression (JTWC 01B), 22-24 Sep 2026, crossing near Kalingapatnam - weak (35-45 kt); a last-week live-data example, not a damage case.",
+ "fixes": [
+  {
+   "t": "2026-09-22T18:00:00Z",
+   "lat": 17.6,
+   "lon": 84.8,
+   "vmax_kt": 35.0,
+   "mslp_hpa": 991.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 25.0,
+   "r34_nm": [
+    0.0,
+    35.0,
+    65.0,
+    60.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2026-09-23T00:00:00Z",
+   "lat": 17.6,
+   "lon": 84.9,
+   "vmax_kt": 40.0,
+   "mslp_hpa": 990.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 20.0,
+   "r34_nm": [
+    10.0,
+    55.0,
+    65.0,
+    60.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2026-09-23T06:00:00Z",
+   "lat": 17.8,
+   "lon": 84.6,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 990.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 20.0,
+   "r34_nm": [
+    25.0,
+    40.0,
+    45.0,
+    35.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2026-09-23T12:00:00Z",
+   "lat": 17.8,
+   "lon": 84.0,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 990.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 20.0,
+   "r34_nm": [
+    25.0,
+    40.0,
+    45.0,
+    35.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2026-09-23T18:00:00Z",
+   "lat": 17.8,
+   "lon": 83.7,
+   "vmax_kt": 40.0,
+   "mslp_hpa": 995.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 20.0,
+   "r34_nm": [
+    25.0,
+    40.0,
+    45.0,
+    35.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2026-09-24T00:00:00Z",
+   "lat": 18.1,
+   "lon": 83.7,
+   "vmax_kt": 35.0,
+   "mslp_hpa": 987.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 20.0,
+   "r34_nm": [
+    25.0,
+    40.0,
+    45.0,
+    35.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  }
+ ],
+ "forecast": [],
+ "reference": {
+  "note": "IMD handled it as a depression / deep depression; wind damage is negligible at this intensity.",
+  "confidence": "medium"
+ }
+}

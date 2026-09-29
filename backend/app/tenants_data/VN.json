@@ -1,0 +1,88 @@
+{
+  "id": "VN",
+  "name": "Vietnam - Hai Phong coast (cross-border demo)",
+  "country": "Vietnam",
+  "iso3": "VNM",
+  "admin_label": "Hai Phong city",
+  "lgd_district_code": null,
+  "focus": {
+    "lat": 20.8449,
+    "lon": 106.6881,
+    "label": "Hai Phong"
+  },
+  "bbox": [
+    20.6,
+    106.5,
+    20.95,
+    106.95
+  ],
+  "dem_zoom": 12,
+  "languages": [
+    "English",
+    "Vietnamese"
+  ],
+  "intensity_scale": "SSHS",
+  "authority": {
+    "forecaster": "Viet Nam National Center for Hydro-Meteorological Forecasting (NCHMF)",
+    "alert_channel": "National disaster prevention authority (illustrative)",
+    "sdma": "Provincial Steering Committee for Natural Disaster Prevention"
+  },
+  "recipients": [
+    {
+      "role": "district_collector",
+      "label": "Provincial disaster-prevention command"
+    },
+    {
+      "role": "hospital",
+      "label": "Hospital directors"
+    },
+    {
+      "role": "power",
+      "label": "Electricity utility"
+    },
+    {
+      "role": "roads",
+      "label": "Transport department"
+    },
+    {
+      "role": "shelter",
+      "label": "Evacuation-site managers"
+    },
+    {
+      "role": "fisheries",
+      "label": "Fisheries / border guard"
+    }
+  ],
+  "tide_default_m": 0.6,
+  "sectors": [
+    {
+      "id": "do-son",
+      "lat": 20.7,
+      "lon": 106.8,
+      "width_km": 60,
+      "depth_m": 20,
+      "k": 1.0,
+      "note": "UNCALIBRATED demo tenant: shallow Gulf of Tonkin shelf, hand-set"
+    },
+    {
+      "id": "delta-south",
+      "lat": 20.62,
+      "lon": 106.56,
+      "width_km": 60,
+      "depth_m": 15,
+      "k": 1.0,
+      "note": "UNCALIBRATED demo tenant"
+    }
+  ],
+  "replay_storms": [
+    "yagi-2024"
+  ],
+  "calibration": null,
+  "attribution": [
+    "Map data (c) OpenStreetMap contributors (ODbL)",
+    "Elevation: Mapzen/AWS Terrain Tiles",
+    "Storm tracks: JTWC best track via UCAR RAL"
+  ],
+  "utc_offset_hours": 7,
+  "tz_label": "ICT"
+}

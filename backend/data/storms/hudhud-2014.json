@@ -1,0 +1,337 @@
+{
+ "id": "hudhud-2014",
+ "name": "Hudhud",
+ "basin": "IO",
+ "season": 2014,
+ "source": "JTWC best track via UCAR RAL (https://hurricanes.ral.ucar.edu/repository/data/bdecks_open/2014/bio032014.dat)",
+ "authority": "JTWC guidance (not an official warning)",
+ "wind_avg_period_min": 1,
+ "kind": "replay",
+ "summary": "Very Severe Cyclonic Storm that made landfall at Visakhapatnam on 12 Oct 2014.",
+ "fixes": [
+  {
+   "t": "2014-10-08T00:00:00Z",
+   "lat": 12.5,
+   "lon": 92.5,
+   "vmax_kt": 35.0,
+   "mslp_hpa": 996.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 40.0,
+   "r34_nm": null,
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-08T06:00:00Z",
+   "lat": 12.6,
+   "lon": 91.8,
+   "vmax_kt": 35.0,
+   "mslp_hpa": 996.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 35.0,
+   "r34_nm": null,
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-08T12:00:00Z",
+   "lat": 13.0,
+   "lon": 90.7,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 989.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 35.0,
+   "r34_nm": [
+    70.0,
+    55.0,
+    55.0,
+    70.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-08T18:00:00Z",
+   "lat": 13.4,
+   "lon": 89.6,
+   "vmax_kt": 50.0,
+   "mslp_hpa": 985.0,
+   "poci_hpa": 1007.0,
+   "rmw_nm": 25.0,
+   "r34_nm": [
+    70.0,
+    55.0,
+    55.0,
+    70.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-09T00:00:00Z",
+   "lat": 13.6,
+   "lon": 89.2,
+   "vmax_kt": 55.0,
+   "mslp_hpa": 982.0,
+   "poci_hpa": 1007.0,
+   "rmw_nm": 25.0,
+   "r34_nm": [
+    70.0,
+    55.0,
+    55.0,
+    70.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-09T06:00:00Z",
+   "lat": 13.7,
+   "lon": 88.7,
+   "vmax_kt": 60.0,
+   "mslp_hpa": 978.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    85.0,
+    65.0,
+    65.0,
+    85.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-09T12:00:00Z",
+   "lat": 14.0,
+   "lon": 88.2,
+   "vmax_kt": 60.0,
+   "mslp_hpa": 978.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    85.0,
+    65.0,
+    65.0,
+    85.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-09T18:00:00Z",
+   "lat": 14.2,
+   "lon": 87.8,
+   "vmax_kt": 60.0,
+   "mslp_hpa": 978.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    85.0,
+    65.0,
+    65.0,
+    85.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-10T00:00:00Z",
+   "lat": 14.4,
+   "lon": 87.6,
+   "vmax_kt": 65.0,
+   "mslp_hpa": 974.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    85.0,
+    65.0,
+    65.0,
+    85.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-10T06:00:00Z",
+   "lat": 14.8,
+   "lon": 87.1,
+   "vmax_kt": 65.0,
+   "mslp_hpa": 974.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    85.0,
+    65.0,
+    65.0,
+    85.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-10T12:00:00Z",
+   "lat": 15.4,
+   "lon": 86.9,
+   "vmax_kt": 75.0,
+   "mslp_hpa": 967.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 25.0,
+   "r34_nm": [
+    100.0,
+    75.0,
+    75.0,
+    95.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-10T18:00:00Z",
+   "lat": 15.9,
+   "lon": 86.5,
+   "vmax_kt": 85.0,
+   "mslp_hpa": 959.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 20.0,
+   "r34_nm": [
+    110.0,
+    100.0,
+    105.0,
+    105.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-11T00:00:00Z",
+   "lat": 16.0,
+   "lon": 85.8,
+   "vmax_kt": 85.0,
+   "mslp_hpa": 959.0,
+   "poci_hpa": 1003.0,
+   "rmw_nm": 20.0,
+   "r34_nm": [
+    110.0,
+    100.0,
+    105.0,
+    110.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-11T06:00:00Z",
+   "lat": 16.0,
+   "lon": 85.2,
+   "vmax_kt": 105.0,
+   "mslp_hpa": 944.0,
+   "poci_hpa": 1003.0,
+   "rmw_nm": 10.0,
+   "r34_nm": [
+    130.0,
+    110.0,
+    110.0,
+    130.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-11T12:00:00Z",
+   "lat": 16.3,
+   "lon": 84.8,
+   "vmax_kt": 110.0,
+   "mslp_hpa": 941.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 15.0,
+   "r34_nm": [
+    140.0,
+    120.0,
+    120.0,
+    140.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-11T18:00:00Z",
+   "lat": 16.6,
+   "lon": 84.6,
+   "vmax_kt": 110.0,
+   "mslp_hpa": 941.0,
+   "poci_hpa": 1003.0,
+   "rmw_nm": 10.0,
+   "r34_nm": [
+    140.0,
+    120.0,
+    120.0,
+    140.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-12T00:00:00Z",
+   "lat": 17.2,
+   "lon": 84.2,
+   "vmax_kt": 110.0,
+   "mslp_hpa": 941.0,
+   "poci_hpa": 1002.0,
+   "rmw_nm": 10.0,
+   "r34_nm": [
+    140.0,
+    120.0,
+    120.0,
+    140.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-12T06:00:00Z",
+   "lat": 17.5,
+   "lon": 83.5,
+   "vmax_kt": 115.0,
+   "mslp_hpa": 937.0,
+   "poci_hpa": 1002.0,
+   "rmw_nm": 15.0,
+   "r34_nm": [
+    130.0,
+    130.0,
+    105.0,
+    115.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2014-10-12T12:00:00Z",
+   "lat": 18.0,
+   "lon": 82.9,
+   "vmax_kt": 105.0,
+   "mslp_hpa": 944.0,
+   "poci_hpa": 1002.0,
+   "rmw_nm": 15.0,
+   "r34_nm": [
+    130.0,
+    130.0,
+    105.0,
+    115.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  }
+ ],
+ "forecast": [],
+ "reference": {
+  "observed_surge_m": [
+   1.2,
+   1.4
+  ],
+  "where": "Visakhapatnam tide gauge",
+  "note": "Max surge 1.4 m at the tide gauge off Vizag; peak about 1.2 m above astronomical tide (IMD RSMC report).",
+  "url": "https://rsmcnewdelhi.imd.gov.in/uploads/report/26/26_fac6af_hud.pdf",
+  "confidence": "medium-high"
+ }
+}

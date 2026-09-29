@@ -1,0 +1,113 @@
+{
+  "id": "IN-OR",
+  "name": "Odisha - Puri coast",
+  "country": "India",
+  "iso3": "IND",
+  "admin_label": "Puri district (LGD code to be filled from lgdirectory.gov.in)",
+  "lgd_district_code": null,
+  "focus": {
+    "lat": 19.8133,
+    "lon": 85.8314,
+    "label": "Puri"
+  },
+  "bbox": [
+    19.68,
+    85.7,
+    19.95,
+    86.1
+  ],
+  "dem_zoom": 12,
+  "languages": [
+    "English",
+    "Odia",
+    "Hindi"
+  ],
+  "intensity_scale": "IMD",
+  "authority": {
+    "forecaster": "India Meteorological Department (RSMC New Delhi)",
+    "alert_channel": "NDMA SACHET (CAP) via State Disaster Management Authority",
+    "sdma": "Odisha State Disaster Management Authority (OSDMA)"
+  },
+  "recipients": [
+    {
+      "role": "district_collector",
+      "label": "District Collector / DDMA control room"
+    },
+    {
+      "role": "hospital",
+      "label": "Hospital superintendents"
+    },
+    {
+      "role": "power",
+      "label": "Power distribution company (DISCOM)"
+    },
+    {
+      "role": "roads",
+      "label": "Works department / NHAI"
+    },
+    {
+      "role": "shelter",
+      "label": "Cyclone shelter managers"
+    },
+    {
+      "role": "fisheries",
+      "label": "Fisheries department / coastal police"
+    }
+  ],
+  "tide_default_m": 0.4,
+  "sectors": [
+    {
+      "id": "puri-west",
+      "lat": 19.79,
+      "lon": 85.76,
+      "width_km": 60,
+      "depth_m": 20,
+      "k": 0.65,
+      "note": "k=0.65 derived by scripts/calibrate.py from Fani 2019 (about 1.5 m reported at Puri; INCOIS guidance was up to ~4 m). IN-SAMPLE calibration, n=1, low-precision observation; shelf L and h are hand-set."
+    },
+    {
+      "id": "puri-beach",
+      "lat": 19.795,
+      "lon": 85.83,
+      "width_km": 60,
+      "depth_m": 20,
+      "k": 0.65,
+      "note": "k=0.65 derived by scripts/calibrate.py from Fani 2019 (about 1.5 m reported at Puri; INCOIS guidance was up to ~4 m). IN-SAMPLE calibration, n=1, low-precision observation; shelf L and h are hand-set."
+    },
+    {
+      "id": "puri-east",
+      "lat": 19.835,
+      "lon": 85.96,
+      "width_km": 60,
+      "depth_m": 20,
+      "k": 0.65,
+      "note": "k=0.65 derived by scripts/calibrate.py from Fani 2019 (about 1.5 m reported at Puri; INCOIS guidance was up to ~4 m). IN-SAMPLE calibration, n=1, low-precision observation; shelf L and h are hand-set."
+    },
+    {
+      "id": "konark",
+      "lat": 19.88,
+      "lon": 86.07,
+      "width_km": 60,
+      "depth_m": 20,
+      "k": 0.65,
+      "note": "k=0.65 derived by scripts/calibrate.py from Fani 2019 (about 1.5 m reported at Puri; INCOIS guidance was up to ~4 m). IN-SAMPLE calibration, n=1, low-precision observation; shelf L and h are hand-set."
+    }
+  ],
+  "replay_storms": [
+    "fani-2019",
+    "phailin-2013"
+  ],
+  "calibration": {
+    "storm": "fani-2019",
+    "observed_surge_m": [
+      1.2,
+      1.8
+    ],
+    "where": "Puri coast (reported)"
+  },
+  "attribution": [
+    "Map data (c) OpenStreetMap contributors (ODbL)",
+    "Elevation: Mapzen/AWS Terrain Tiles (SRTM and others)",
+    "Storm tracks: JTWC best track via UCAR RAL"
+  ]
+}

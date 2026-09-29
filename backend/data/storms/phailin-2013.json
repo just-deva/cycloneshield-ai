@@ -1,0 +1,160 @@
+{
+ "id": "phailin-2013",
+ "name": "Phailin",
+ "basin": "IO",
+ "season": 2013,
+ "source": "JTWC best track via UCAR RAL (https://hurricanes.ral.ucar.edu/repository/data/bdecks_open/2013/bio022013.dat)",
+ "authority": "JTWC guidance (not an official warning)",
+ "wind_avg_period_min": 1,
+ "kind": "replay",
+ "summary": "Very Severe Cyclonic Storm; landfall near Gopalpur, Odisha, on 12 Oct 2013 (about 1 million evacuated).",
+ "fixes": [
+  {
+   "t": "2013-10-09T18:00:00Z",
+   "lat": 14.1,
+   "lon": 91.6,
+   "vmax_kt": 50.0,
+   "mslp_hpa": 985.0,
+   "poci_hpa": 1007.0,
+   "rmw_nm": 45.0,
+   "r34_nm": [
+    55.0,
+    55.0,
+    60.0,
+    65.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2013-10-10T12:00:00Z",
+   "lat": 15.4,
+   "lon": 90.3,
+   "vmax_kt": 100.0,
+   "mslp_hpa": 948.0,
+   "poci_hpa": 1005.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    70.0,
+    70.0,
+    75.0,
+    80.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2013-10-10T18:00:00Z",
+   "lat": 15.6,
+   "lon": 89.4,
+   "vmax_kt": 125.0,
+   "mslp_hpa": 929.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    85.0,
+    80.0,
+    80.0,
+    85.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2013-10-11T12:00:00Z",
+   "lat": 16.7,
+   "lon": 87.7,
+   "vmax_kt": 140.0,
+   "mslp_hpa": 918.0,
+   "poci_hpa": 1002.0,
+   "rmw_nm": 10.0,
+   "r34_nm": [
+    90.0,
+    85.0,
+    80.0,
+    95.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2013-10-11T18:00:00Z",
+   "lat": 16.9,
+   "lon": 87.1,
+   "vmax_kt": 140.0,
+   "mslp_hpa": 918.0,
+   "poci_hpa": 1003.0,
+   "rmw_nm": 10.0,
+   "r34_nm": [
+    100.0,
+    90.0,
+    90.0,
+    100.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2013-10-12T00:00:00Z",
+   "lat": 17.4,
+   "lon": 86.5,
+   "vmax_kt": 140.0,
+   "mslp_hpa": 918.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 10.0,
+   "r34_nm": [
+    120.0,
+    110.0,
+    110.0,
+    120.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2013-10-12T06:00:00Z",
+   "lat": 18.0,
+   "lon": 85.8,
+   "vmax_kt": 130.0,
+   "mslp_hpa": 926.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 15.0,
+   "r34_nm": [
+    120.0,
+    110.0,
+    110.0,
+    120.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2013-10-12T12:00:00Z",
+   "lat": 18.7,
+   "lon": 85.3,
+   "vmax_kt": 120.0,
+   "mslp_hpa": 933.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 10.0,
+   "r34_nm": [
+    120.0,
+    110.0,
+    110.0,
+    105.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  }
+ ],
+ "forecast": [],
+ "reference": {
+  "observed_surge_m": [
+   2.0,
+   2.5
+  ],
+  "where": "near Gopalpur",
+  "note": "2-2.5 m above astronomical tide near landfall; >3 m reported in parts (NIDM lessons-learnt).",
+  "url": "https://nidm.gov.in/pdf/pubs/proc%20phailin-14.pdf",
+  "confidence": "medium"
+ }
+}

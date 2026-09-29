@@ -1,0 +1,467 @@
+{
+ "id": "fani-2019",
+ "name": "Fani",
+ "basin": "IO",
+ "season": 2019,
+ "source": "JTWC best track via UCAR RAL (https://hurricanes.ral.ucar.edu/repository/data/bdecks_open/2019/bio012019.dat)",
+ "authority": "JTWC guidance (not an official warning)",
+ "wind_avg_period_min": 1,
+ "kind": "replay",
+ "summary": "Extremely Severe Cyclonic Storm; first land contact near Puri, Odisha, on 3 May 2019.",
+ "fixes": [
+  {
+   "t": "2019-04-27T00:00:00Z",
+   "lat": 4.5,
+   "lon": 87.9,
+   "vmax_kt": 35.0,
+   "mslp_hpa": 1002.0,
+   "poci_hpa": 1008.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    95.0,
+    35.0,
+    50.0,
+    45.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-27T06:00:00Z",
+   "lat": 5.1,
+   "lon": 89.8,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 998.0,
+   "poci_hpa": 1008.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    80.0,
+    60.0,
+    70.0,
+    40.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-27T12:00:00Z",
+   "lat": 6.4,
+   "lon": 89.5,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 996.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    110.0,
+    85.0,
+    75.0,
+    85.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-27T18:00:00Z",
+   "lat": 7.5,
+   "lon": 88.9,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 996.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    90.0,
+    75.0,
+    65.0,
+    45.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-28T00:00:00Z",
+   "lat": 7.5,
+   "lon": 88.1,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 996.0,
+   "poci_hpa": 1008.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    95.0,
+    65.0,
+    65.0,
+    85.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-28T06:00:00Z",
+   "lat": 7.5,
+   "lon": 87.6,
+   "vmax_kt": 50.0,
+   "mslp_hpa": 995.0,
+   "poci_hpa": 1008.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    75.0,
+    85.0,
+    70.0,
+    75.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-28T12:00:00Z",
+   "lat": 8.5,
+   "lon": 86.9,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 996.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    80.0,
+    80.0,
+    70.0,
+    85.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-28T18:00:00Z",
+   "lat": 8.0,
+   "lon": 88.1,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 995.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    85.0,
+    70.0,
+    45.0,
+    75.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-29T00:00:00Z",
+   "lat": 8.3,
+   "lon": 87.4,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 989.0,
+   "poci_hpa": 1008.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    70.0,
+    75.0,
+    75.0,
+    60.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-29T06:00:00Z",
+   "lat": 9.5,
+   "lon": 87.1,
+   "vmax_kt": 45.0,
+   "mslp_hpa": 998.0,
+   "poci_hpa": 1008.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    90.0,
+    75.0,
+    0.0,
+    0.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-29T12:00:00Z",
+   "lat": 10.2,
+   "lon": 86.8,
+   "vmax_kt": 55.0,
+   "mslp_hpa": 990.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    125.0,
+    105.0,
+    85.0,
+    100.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-29T18:00:00Z",
+   "lat": 11.1,
+   "lon": 87.1,
+   "vmax_kt": 65.0,
+   "mslp_hpa": 984.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 30.0,
+   "r34_nm": [
+    120.0,
+    95.0,
+    95.0,
+    90.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-30T00:00:00Z",
+   "lat": 11.8,
+   "lon": 86.5,
+   "vmax_kt": 85.0,
+   "mslp_hpa": 971.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 5.0,
+   "r34_nm": [
+    105.0,
+    100.0,
+    90.0,
+    85.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-30T06:00:00Z",
+   "lat": 12.7,
+   "lon": 85.8,
+   "vmax_kt": 90.0,
+   "mslp_hpa": 967.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 5.0,
+   "r34_nm": [
+    120.0,
+    115.0,
+    90.0,
+    95.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-30T12:00:00Z",
+   "lat": 13.2,
+   "lon": 84.8,
+   "vmax_kt": 95.0,
+   "mslp_hpa": 964.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    110.0,
+    90.0,
+    80.0,
+    100.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-04-30T18:00:00Z",
+   "lat": 13.5,
+   "lon": 84.3,
+   "vmax_kt": 105.0,
+   "mslp_hpa": 955.0,
+   "poci_hpa": 1006.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    120.0,
+    110.0,
+    85.0,
+    95.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-05-01T00:00:00Z",
+   "lat": 13.9,
+   "lon": 83.9,
+   "vmax_kt": 105.0,
+   "mslp_hpa": 952.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    130.0,
+    115.0,
+    90.0,
+    110.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-05-01T06:00:00Z",
+   "lat": 14.2,
+   "lon": 84.0,
+   "vmax_kt": 105.0,
+   "mslp_hpa": 951.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    95.0,
+    115.0,
+    110.0,
+    100.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-05-01T12:00:00Z",
+   "lat": 14.9,
+   "lon": 84.2,
+   "vmax_kt": 105.0,
+   "mslp_hpa": 951.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 5.0,
+   "r34_nm": [
+    95.0,
+    115.0,
+    110.0,
+    100.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-05-01T18:00:00Z",
+   "lat": 15.4,
+   "lon": 84.3,
+   "vmax_kt": 105.0,
+   "mslp_hpa": 951.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 5.0,
+   "r34_nm": [
+    140.0,
+    135.0,
+    120.0,
+    125.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-05-02T00:00:00Z",
+   "lat": 15.9,
+   "lon": 84.5,
+   "vmax_kt": 110.0,
+   "mslp_hpa": 948.0,
+   "poci_hpa": 1003.0,
+   "rmw_nm": 5.0,
+   "r34_nm": [
+    170.0,
+    170.0,
+    130.0,
+    115.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-05-02T06:00:00Z",
+   "lat": 16.7,
+   "lon": 84.9,
+   "vmax_kt": 115.0,
+   "mslp_hpa": 939.0,
+   "poci_hpa": 1001.0,
+   "rmw_nm": 5.0,
+   "r34_nm": [
+    130.0,
+    145.0,
+    115.0,
+    105.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-05-02T12:00:00Z",
+   "lat": 17.6,
+   "lon": 84.8,
+   "vmax_kt": 135.0,
+   "mslp_hpa": 917.0,
+   "poci_hpa": 999.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    155.0,
+    160.0,
+    130.0,
+    125.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-05-02T18:00:00Z",
+   "lat": 18.3,
+   "lon": 85.0,
+   "vmax_kt": 135.0,
+   "mslp_hpa": 920.0,
+   "poci_hpa": 999.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    100.0,
+    110.0,
+    80.0,
+    65.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-05-03T00:00:00Z",
+   "lat": 19.0,
+   "lon": 85.5,
+   "vmax_kt": 130.0,
+   "mslp_hpa": 923.0,
+   "poci_hpa": 1002.0,
+   "rmw_nm": 12.0,
+   "r34_nm": [
+    195.0,
+    195.0,
+    165.0,
+    150.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  },
+  {
+   "t": "2019-05-03T06:00:00Z",
+   "lat": 20.2,
+   "lon": 85.8,
+   "vmax_kt": 115.0,
+   "mslp_hpa": 942.0,
+   "poci_hpa": 1004.0,
+   "rmw_nm": 10.0,
+   "r34_nm": [
+    135.0,
+    145.0,
+    120.0,
+    90.0
+   ],
+   "r50_nm": null,
+   "r64_nm": null
+  }
+ ],
+ "forecast": [],
+ "reference": {
+  "observed_surge_m": [
+   1.2,
+   1.8
+  ],
+  "where": "Puri coast",
+  "note": "About 1.5 m reported; INCOIS guidance days earlier suggested up to ~4 m, so forecast-vs-observed gaps of ~2 m are normal.",
+  "url": "https://floodlist.com/asia/india-bangladesh-tropical-cyclone-fani-may-2019",
+  "confidence": "medium",
+  "damage_reports": "Media-reported (unverified): ~1.56 lakh electric poles and >10,000 distribution transformers damaged in Odisha."
+ }
+}

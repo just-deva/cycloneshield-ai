@@ -1,0 +1,90 @@
+[
+ {
+  "id": "hudhud-2014",
+  "name": "Hudhud",
+  "basin": "IO",
+  "season": 2014,
+  "peak_kt_1min": 115.0,
+  "start": "2014-10-08T00:00:00+00:00",
+  "end": "2014-10-12T12:00:00+00:00",
+  "n_fixes": 19,
+  "summary": "Very Severe Cyclonic Storm that made landfall at Visakhapatnam on 12 Oct 2014."
+ },
+ {
+  "id": "phailin-2013",
+  "name": "Phailin",
+  "basin": "IO",
+  "season": 2013,
+  "peak_kt_1min": 140.0,
+  "start": "2013-10-09T18:00:00+00:00",
+  "end": "2013-10-12T12:00:00+00:00",
+  "n_fixes": 8,
+  "summary": "Very Severe Cyclonic Storm; landfall near Gopalpur, Odisha, on 12 Oct 2013 (about 1 million evacuated)."
+ },
+ {
+  "id": "fani-2019",
+  "name": "Fani",
+  "basin": "IO",
+  "season": 2019,
+  "peak_kt_1min": 135.0,
+  "start": "2019-04-27T00:00:00+00:00",
+  "end": "2019-05-03T06:00:00+00:00",
+  "n_fixes": 26,
+  "summary": "Extremely Severe Cyclonic Storm; first land contact near Puri, Odisha, on 3 May 2019."
+ },
+ {
+  "id": "amphan-2020",
+  "name": "Amphan",
+  "basin": "IO",
+  "season": 2020,
+  "peak_kt_1min": 145.0,
+  "start": "2020-05-16T12:00:00+00:00",
+  "end": "2020-05-21T00:00:00+00:00",
+  "n_fixes": 19,
+  "summary": "Super Cyclonic Storm; landfall in the Sundarbans (West Bengal) on 20 May 2020."
+ },
+ {
+  "id": "michaung-2023",
+  "name": "Michaung",
+  "basin": "IO",
+  "season": 2023,
+  "peak_kt_1min": 60.0,
+  "start": "2023-12-03T00:00:00+00:00",
+  "end": "2023-12-05T00:00:00+00:00",
+  "n_fixes": 9,
+  "summary": "Severe Cyclonic Storm; rainfall-dominated impact on Chennai and coastal Andhra Pradesh, Dec 2023."
+ },
+ {
+  "id": "montha-2025",
+  "name": "Montha",
+  "basin": "IO",
+  "season": 2025,
+  "peak_kt_1min": 45.0,
+  "start": "2025-10-26T12:00:00+00:00",
+  "end": "2025-10-29T00:00:00+00:00",
+  "n_fixes": 11,
+  "summary": "Severe Cyclonic Storm; landfall process near Kakinada, Andhra Pradesh, on the evening of 28 Oct 2025."
+ },
+ {
+  "id": "one-26",
+  "name": "One",
+  "basin": "IO",
+  "season": 2026,
+  "peak_kt_1min": 45.0,
+  "start": "2026-09-22T18:00:00+00:00",
+  "end": "2026-09-24T00:00:00+00:00",
+  "n_fixes": 6,
+  "summary": "Bay of Bengal depression (JTWC 01B), 22-24 Sep 2026, crossing near Kalingapatnam - weak (35-45 kt); a last-week live-data example, not a damage case."
+ },
+ {
+  "id": "yagi-2024",
+  "name": "Yagi",
+  "basin": "WP",
+  "season": 2024,
+  "peak_kt_1min": 130.0,
+  "start": "2024-09-01T12:00:00+00:00",
+  "end": "2024-09-07T18:00:00+00:00",
+  "n_fixes": 26,
+  "summary": "Typhoon Yagi (Sep 2024) - West Pacific system that hit northern Vietnam; used to show the pipeline is basin-agnostic."
+ }
+]
