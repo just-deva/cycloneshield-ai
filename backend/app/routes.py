@@ -162,7 +162,11 @@ def handle_telegram_update(update: dict) -> None:
         try:
             workflow.acknowledge(adv_id, actor, via="telegram")
             channels.answer_callback(cb["id"], "Receipt acknowledged and logged.")
+            log.info("telegram acknowledgement recorded for %s by %s", adv_id, actor)
         except Exception as exc:  # noqa: BLE001
+            # never lose a button press silently: log it, tell the user in Telegram, and leave an audit entry
+            log.warning("telegram acknowledgement for %s failed: %s", adv_id, exc)
+            audit.append(actor, "telegram_ack_failed", adv_id, {"error": str(exc)[:200]})
             channels.answer_callback(cb["id"], f"Could not acknowledge: {exc}"[:150])
 
 

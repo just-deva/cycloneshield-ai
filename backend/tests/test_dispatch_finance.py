@@ -128,3 +128,24 @@ def test_finance_endpoint_and_approval_are_audited(hudhud):
     assert r["tier_reached"] == "T2 Warning"
     ap = client.post(f"/api/finance/{hudhud['sim_id']}/approve", json={"actor": "Approver A", "lead_h": 24, "pool_crore": 10}).json()
     assert ap["approved"] and audit.verify()["ok"]
+
+
+def test_telegram_acknowledge_button_marks_the_advisory_and_is_audited(hudhud, monkeypatch):
+    from app import routes
+    answers = []
+    monkeypatch.setattr(routes.channels, "answer_callback", lambda cb_id, text: answers.append((cb_id, text)))
+    a = _draft(hudhud["sim_id"], lead_h=48, role="hospital")            # yellow: one approver
+    i = a["id"]
+    client.post(f"/api/advisories/{i}/submit", json={"actor": "Maker"})
+    client.post(f"/api/advisories/{i}/approve", json={"actor": "Approver A"})
+    client.post(f"/api/advisories/{i}/dispatch", json={"actor": "Approver A"})
+    routes.handle_telegram_update({"callback_query": {"id": "cb1", "data": f"ack:{i}", "from": {"username": "duty_officer", "id": 42}}})
+    rec = workflow.get(i)
+    assert rec["status"] == "ACKED" and rec["acks"][0]["via"] == "telegram" and rec["acks"][0]["actor"] == "telegram:duty_officer"
+    assert answers[-1][1].startswith("Receipt acknowledged")
+    assert audit.verify()["ok"]
+    # a press for an advisory that was never dispatched is refused, told to the user, and audited (never silently dropped)
+    b = _draft(hudhud["sim_id"], lead_h=48, role="power")
+    routes.handle_telegram_update({"callback_query": {"id": "cb2", "data": f"ack:{b['id']}", "from": {"id": 7}}})
+    assert workflow.get(b["id"])["status"] == "DRAFT" and answers[-1][1].startswith("Could not acknowledge")
+    assert any(e["action"] == "telegram_ack_failed" for e in audit.read_all())

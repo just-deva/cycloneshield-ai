@@ -1,0 +1,866 @@
+==============================================================================================
+CYCLONESHIELD AI - THE PROPOSED SOLUTION EXPLAINED
+==============================================================================================
+
+Project      : CycloneShield AI
+Challenge    : Build with AI: Code for Communities, Second Edition (Google Cloud x Hack2skill)
+Track        : Track 05 (Resilience) - Track-Based Cyclone Impact & Infrastructure Vulnerability
+               Forecaster
+Repository   : https://github.com/just-deva/cycloneshield-ai   (branch: code-for-communities-2026)
+
+IMPORTANT NOTE. CycloneShield AI is a decision-support tool. It is NOT an official warning.
+Official cyclone warnings come only from the India Meteorological Department (IMD); public alerts
+only from the National Disaster Management Authority (NDMA) and State Disaster Management
+Authorities (SDMAs). Everything below should be read with that in mind.
+
+How this document is organised
+------------------------------
+  PART A  Plain-language explanation, with analogies. No prior knowledge needed.
+  PART B  Technical explanation: every component, the decisions behind it, the alternatives we
+          did not take, and the known limits.
+
+If you only have five minutes, read Part A, sections A1 to A3, and Part B, section B0.
+
+
+##############################################################################################
+PART A - THE PLAIN-LANGUAGE EXPLANATION
+##############################################################################################
+
+
+A1. THE PROBLEM
+---------------
+
+A cyclone is like a very large, slow, spinning machine that we can see coming for days. India's
+weather service (IMD) is good at telling us where the machine is now, where it will probably go,
+and how strong it will be. That warning system is one of the best in the world, and it works: in
+1999 the Odisha "Super Cyclone" killed roughly 10,000 people; in 2013 (Phailin) and 2019 (Fani),
+storms of similar or greater power killed a few dozen, because people were warned early and about
+a million were moved to safety each time.
+
+But there is a gap between "a storm is coming" and "here is exactly what to do in my district".
+
+Analogy: Imagine a weather app tells you "heavy rain tomorrow". That is useful. But what you
+actually need to know is: "Will MY street flood? At what time? Is the road to the hospital still
+open? By when must I leave, and which way do I go?" A general forecast cannot answer those
+questions. A District Collector (the senior officer of a district) has exactly those questions,
+multiplied by hundreds of hospitals, power stations, roads and shelters, three days before the
+storm arrives:
+
+   - Which hospitals will lose power or be cut off, and when?
+   - Which electrical substations will be flooded or hit by destructive wind?
+   - Which roads will be under water, so which evacuation routes still work?
+   - Which shelters are safe, and by what time must people leave to reach them?
+   - Who must be told what, in which language, and who approves the message?
+   - Should relief money be released now, before the storm, instead of after?
+
+Today much of this is done by hand: officers lay forecast maps over lists of buildings, phone
+departments, and write messages under time pressure. Acting BEFORE the storm (evacuating,
+protecting equipment, releasing pre-agreed funds) saves lives and livelihoods. Acting AFTER is
+recovery. Our project is about closing that last step between "there is a forecast" and
+"everyone who must act knows exactly what to do".
+
+
+A2. WHAT WE BUILT, IN ONE PARAGRAPH
+-----------------------------------
+
+CycloneShield AI is like a "navigation app for a cyclone", built for the officers who must
+respond. It does NOT predict the cyclone - IMD does that, and we trust IMD. It takes the official
+forecast and answers: "So what, for MY district, hour by hour?" It works out what the storm will
+do to the ground (wind, sea water, rain), checks that against real hospitals, power stations,
+roads and shelters, plans safe evacuation routes with "leave before" times, drafts the warning
+messages in local languages, and - only after human officers approve - sends them out and keeps a
+tamper-evident record of everything.
+
+
+A3. THE BIG IDEA: "NUMBERS FROM CODE, WORDS FROM THE AI"
+--------------------------------------------------------
+
+The single most important design decision in the project is this:
+
+   Every NUMBER (wind speed, flood depth, time of arrival) is calculated by ordinary, checkable
+   computer code. The AI (Google's Gemini) is only allowed to READ documents and to WRITE and
+   EXPLAIN in words. And even then, a separate piece of code checks every number in what the AI
+   wrote against the calculated numbers before any human sees it.
+
+Analogy: Think of a newspaper. The AI is a good reporter who writes clearly and can translate
+into many languages. But the reporter is not allowed to make up statistics: a fact-checker sits
+next to them with the original spreadsheet and a red pen. If the reporter writes a number that is
+not in the spreadsheet, the article is sent back. And nothing is published until an editor - a
+human - signs it off. In our system the "spreadsheet" is called the FACTS PACKET, the
+"fact-checker" is called the VALIDATOR, and the "editor" is the approving officer.
+
+Why this matters: AI language models can sound confident while being wrong ("hallucination"). In
+a cyclone, a wrong number can mean someone is told to stay in a place that floods. So we never
+let the AI be the source of a number, and we never let it send anything on its own.
+
+
+A4. THE PARTS OF THE SYSTEM, EACH WITH AN ANALOGY
+--------------------------------------------------
+
+Step 1 - READING THE STORM
+   What it does: Takes the official storm track. Either a replay of a real past cyclone, so
+   anyone can try the tool today, or an official IMD bulletin (a PDF or a picture), which Gemini
+   reads and turns into a structured table of positions and strengths.
+   Analogy: A translator who reads a letter in a hard-to-parse format and copies the key facts
+   onto a clean form. A supervisor (our validation code) then checks the form: "A wind of 900 km/h?
+   A position in the middle of Africa? Times out of order?" - and flags anything impossible.
+
+Step 2 - WIND
+   What it does: Estimates how strong the wind is at every point around the storm.
+   Analogy: Ripples spreading from a stone dropped in a pond - but spinning. Right at the "eye" it
+   is calm; just outside it the wind is the fiercest (the "eyewall"); it fades with distance.
+   We use a well-known published formula (Holland, 1980) that draws this shape. The side of the
+   storm where the storm's own spin adds to its forward movement is stronger, so the wind is
+   stronger to the right of the track (in the Northern Hemisphere) than to the left.
+
+Step 3 - STORM SURGE (SEA WATER PUSHED ONTO LAND)
+   What it does: Estimates how high the sea will rise at the coast, for each stretch of coast.
+   Analogy: Two things push the sea up. (1) Low air pressure in the storm acts like a lightly
+   lifted plunger: the sea surface bulges up under it, about 1 cm for each hectopascal of
+   pressure drop. (2) Strong wind blowing toward the shore pushes water ahead of it, like blowing
+   across a plate of soup so it piles up at the far edge. A shallow, wide sea shelf makes that
+   piling-up worse, like soup in a wide, shallow plate. We add the normal tide on top.
+
+Step 4 - FLOODING ON LAND
+   What it does: Decides which land floods, using a map of ground heights.
+   Analogy: A bathtub with a twist. Imagine slowly filling the map with water up to a certain
+   level: everything lower than the water level floods. The twist is that we only flood places
+   that are actually connected to the sea, like a bathtub where the water only reaches the parts
+   joined to the tap - a low field behind a hill does not flood just because it is low. And the
+   water level fades as it travels inland (0.2 metres lower for every kilometre), because the
+   surge loses strength as it spreads, like a wave losing height as it runs up a beach.
+
+Step 5 - RAIN
+   What it does: Estimates how much rain falls and where it will collect or rush.
+   Analogy: Pour a bucket of water over a crumpled bedsheet. The water collects in the dips
+   ("waterlogging basins", puddles) and runs along the folds ("runoff corridors", small streams).
+   We use a standard formula for how much rain a cyclone brings, and a terrain algorithm to find
+   the dips and the folds.
+
+Step 6 - "WHAT IF?" (THE NINE SCENARIOS)
+   What it does: A forecast can be a little wrong. So we re-run everything nine times: the storm
+   nudged 40 km to one side, on the official track, or 40 km to the other; and weaker, as
+   forecast, or stronger by 10 knots. For each building we report "hit in 7 of 9 scenarios".
+   Analogy: Planning to catch a bus that might be five minutes early or late. You do not plan for
+   one exact minute; you plan for the range, and you notice which choices are safe in all cases.
+   Important: "7 of 9" is a spread of what-ifs, not a mathematically calibrated probability, and
+   the tool says so.
+
+Step 7 - CHECKING REAL BUILDINGS AND ROADS
+   What it does: Takes real hospitals, power substations, power lines, main roads and possible
+   shelters (from the open map OpenStreetMap) and checks each against the calculated wind, water
+   and rain, using plain, published thresholds. The result is a "what gets hit, and when" table.
+   Analogy: A building inspector's checklist with a traffic-light result: OK, Watch, At risk,
+   Critical - always with the reasons written next to it ("wind above 118 km/h at 03:00", "flood
+   deeper than 1 metre at the hospital site"). No mystery scoring.
+
+Step 8 - EVACUATION ROUTES
+   What it does: For each locality, finds a route to a safe shelter that avoids flooded roads,
+   and says the latest time you must leave. If there is no safe route, it says so plainly:
+   "shelter in place / request assistance" instead of leaving a blank.
+   Analogy: A GPS that knows which roads are underwater, plus an alarm clock: "leave before 14:30".
+
+Step 9 - HOW SERIOUS IS IT? (THE WARNING TIER)
+   What it does: Decides the alert level - Monitor, Yellow, Orange, Red - using written rules,
+   not the AI's opinion. It looks at two clocks and takes the lower one: (1) how far along
+   IMD's own official four-stage warning system we are (Watch 72 hours out, Alert 48, Warning 24,
+   Post-landfall 12), and (2) how bad our calculated hazard actually is. If there is no real
+   hazard for the district, the tier stays at "Monitor - no action", however close the clock is.
+   Analogy: A traffic light controlled by a rule book, not a mood. A storm that misses the
+   district does not raise a false alarm (we test this with a near-miss storm, Montha 2025).
+
+Step 10 - WRITING THE MESSAGES
+   What it does: Drafts a separate advisory for each audience - collector, hospital, power
+   company, roads department, shelter managers, fishermen - in the local language (Telugu, Odia,
+   Hindi, Bengali, Tamil, Vietnamese...). Gemini writes; the validator checks: every number came
+   from the facts packet, every place name is real, there are no web links or phone numbers, no
+   hidden "ignore your instructions" tricks, and the message admits uncertainty. If it fails, the AI
+   gets one more try with the validator's feedback; if it still fails, we use a plain fill-in-the-
+   blanks template, clearly labelled as such.
+   Analogy: A speechwriter and a fact-checker, as described in A3.
+
+Step 11 - APPROVAL AND SENDING
+   What it does: A message is only sent after a human approves it. For serious messages (Orange
+   and Red) TWO different officers must approve. Then it is sent (Telegram with an
+   "Acknowledge" button, a standard machine-readable alert file called CAP, and a webhook), and
+   every action is written to a log.
+   Analogy: The "two-key" rule for a bank vault: one person prepares, a different person
+   approves, and for the most serious actions two approvers are needed. The AI has no key.
+
+Step 12 - THE UNFORGEABLE LOGBOOK (AUDIT LOG)
+   What it does: Records every action - who drafted, who approved, what was sent, who
+   acknowledged. Each entry contains a fingerprint of the previous entry.
+   Analogy: A ledger where each page is stamped with a fingerprint of the page before it. If
+   someone secretly changes or tears out an old page, the fingerprints on every later page no
+   longer match, so the tampering shows. (We honestly call it "tamper-evident", not "tamper-
+   proof", and we do not call it a blockchain.)
+
+Step 13 - RELEASING MONEY EARLY (ANTICIPATORY FINANCE)
+   What it does: Governments and aid agencies can agree in advance that "if the forecast crosses
+   this line, release X% of a relief fund now". We show which line the current forecast crosses,
+   draft a memo, and list the risks that the rule fires when it shouldn't or misses a real loss
+   ("basis risk"). No money moves; it is a recommendation for a human to approve.
+   Analogy: Travel insurance that pays out when the airline announces a cancellation, rather
+   than after you have filed a receipt.
+
+Step 14 - THE TRUST PANEL
+   What it does: A screen that shows how every number was made, the assumptions, how well the
+   model matches past events (and where it is only a fit, not a proof), every AI call that was
+   made, and a "verify the logbook" button.
+   Analogy: A car's dashboard and service history - you can look under the bonnet.
+
+Extra - SPARE TYRES (WHEN THINGS FAIL)
+   Every outside service can fail: the AI service may be busy or out of quota, the satellite-data
+   service may be unavailable, the phone messaging may be down. The tool never crashes; each has a
+   labelled fallback (template message; open terrain data; simulated sending). Real AI answers are
+   also saved (a "cache") so a demo can still show real output; such answers are marked "(cached)"
+   and re-checked against the current numbers every time. Nothing is ever faked.
+
+Extra - MAKING IT WORK ELSEWHERE (TENANTS)
+   A "tenant" is one region's settings in one small file: where it is, which languages, which
+   storms to replay. Adding another Indian state - or another country - means adding a file and
+   running two data scripts, not rewriting the software. We ship three: Andhra Pradesh
+   (Visakhapatnam), Odisha (Puri) and Vietnam (Hai Phong).
+   Analogy: A franchise. The recipe (software) is the same everywhere; each branch has its own
+   local menu (settings).
+
+
+A5. A WALK THROUGH ONE SCENARIO
+-------------------------------
+
+"What if Cyclone Hudhud, which struck Visakhapatnam in October 2014, came today - with today's
+hospitals, substations and roads?"
+
+   1. An officer opens the app: region Andhra Pradesh, storm Hudhud 2014. The map shows the storm
+      track and hundreds of real hospitals, substations and shelters.
+   2. The officer drags the clock to "24 hours before landfall". The alert level turns ORANGE by
+      rule, and assets light up as the storm reaches them.
+   3. The "Assets" table lists every hospital and substation, its status, what will hit it (wind,
+      sea water, rain), when it is first hit, and "hit in 9 of 9 scenarios".
+   4. "Roads and evacuation" shows which main roads are waterlogged, which localities have a safe
+      route to a shelter (24 of 30 in this run), the latest departure times, and which places are
+      stranded.
+   5. In "Advisories" the officer chooses hospital + Telugu and presses Draft. Gemini writes it;
+      green ticks appear when the checks pass.
+   6. Two different officers approve. The message is sent to a phone through Telegram with an
+      "Acknowledge" button; pressing it marks the message acknowledged in the log.
+   7. "Finance" shows which early-release tier the forecast reaches, with a draft memo.
+   8. Switching to Montha 2025 (a storm that missed the coast) keeps the level at "Monitor - no
+      action": the system does not cry wolf.
+   9. Switching the region to Odisha or Vietnam runs the same pipeline with no code changes.
+
+
+A6. WHAT IS REAL AND WHAT IS SIMULATED
+--------------------------------------
+
+Being honest about this is part of the design.
+
+   REAL     : real historical storm tracks; real OpenStreetMap hospitals/substations/roads; real
+              terrain data; Gemini calls (when the key has quota); Telegram messages with a
+              working Acknowledge button; webhook delivery; the approval workflow; the
+              tamper-evident log; live satellite/weather data through Google Earth Engine.
+   SIMULATED: SMS, WhatsApp, Cell Broadcast and publishing into India's national alert system
+              (SACHET) - these are controlled by telecom operators and the government, so we do
+              not send them; the tool shows what would be sent and labels it as simulated. All the
+              alert files we produce are marked "Exercise" and "Restricted" so they can never be
+              mistaken for a real public alert.
+   ASSUMED  : storm-surge results are "screening level" (good for ranking risk, not a substitute
+              for the official models); the finance percentages are illustrative.
+
+
+A7. WHO BENEFITS AND WHY IT MATTERS
+-----------------------------------
+
+   - District officers get, in minutes, the asset-by-asset picture they now assemble by hand.
+   - Hospitals, power utilities and road departments get an advisory written for THEM, with times.
+   - Communities benefit from earlier, clearer instructions in their own language and from
+     evacuation routes that account for flooded roads.
+   - Funders and planners get a transparent, pre-agreed link between forecast and early funds.
+   - Other states and countries can adopt it by adding a configuration file, so the same tool can
+     scale across Indian states and to BRICS and other cyclone-affected partners.
+
+In short: IMD tells us the storm is coming. CycloneShield AI helps the district decide what to do,
+and when - fast, checkably, and with a human always in charge.
+
+
+##############################################################################################
+PART B - THE TECHNICAL EXPLANATION
+##############################################################################################
+
+
+B0. SYSTEM AT A GLANCE
+----------------------
+
+Pipeline (left to right):
+
+  IMD bulletin (PDF/PNG/text) --Gemini multimodal--> validated Storm
+  Replay library (JTWC best tracks) ------------------> Storm
+                                   Storm --> Hazard engine (wind, surge, inundation, rain,
+                                              pluvial pathways, 9-scenario ensemble)
+  OSM exposure per region + terrain ------> Asset impact + evacuation routing
+                                   Impact --> FACTS PACKET (sole source of numbers)
+                                   Facts  --> Gemini structured draft --> deterministic VALIDATOR
+                                   Validated draft --> maker-checker approval --> dispatch
+                                              (CAP 1.2, Telegram + acknowledge, webhook)
+                                   Every step --> hash-chained audit log
+                                   Impact --> Officer copilot (Gemini function calling)
+                                   Impact --> Anticipatory-finance trigger monitor
+
+Stack: Python 3.11, FastAPI, NumPy, SciPy, NetworkX, Pillow, httpx; google-genai (Gemini API);
+earthengine-api (Google Earth Engine); a static single-page UI (Leaflet + marker clusters, vanilla
+ES modules, no build step) served by the same FastAPI process; Docker; Cloud Run. About 4,500
+lines of backend Python and 55 automated tests.
+
+Five design principles (they explain most decisions below):
+  1. Numbers come from code; words come from the model.
+  2. Every AI output is checked before a person can act on it, and the checks are visible.
+  3. A human approves anything that is sent; the model has no dispatch capability.
+  4. Fail soft and say so: every dependency has a labelled degraded mode.
+  5. Configuration over code: regions, languages, thresholds and shelf geometry live in data files.
+
+
+B1. REPOSITORY LAYOUT
+---------------------
+
+  backend/app/
+    main.py          FastAPI app, health, simulate, layers, methodology, calibration; static hosting;
+                     no-cache middleware for the UI; warm-up thread
+    routes.py        Operations API: advisories, approvals, dispatch, audit, copilot, bulletin,
+                     finance, Earth Engine, Telegram webhook/polling
+    config.py        Settings (env), Tenant/Sector models, replay-storm loading
+    engine.py        Orchestrates a simulation (with the ensemble) and caches results (LRU, 24)
+    finance.py       Trigger tiers, release memo, basis-risk statement
+    storms/          ATCF/JTWC parsing, track interpolation, what-if scenario generation
+    hazard/          wind, surge, inundation, pluvial, rain, dem, gee (Earth Engine)
+    exposure/        OSM assets, impact rules and expected loss, evacuation routing
+    ai/              gemini_client, bulletin, facts, advisory, validator, copilot, aicache, trace
+    dispatch/        cap (CAP 1.2), audit (hash chain), channels (Telegram/webhook), workflow
+    static/          index.html, css/, js/ (api, app, mapview, state, util, tabs/*)
+    tenants_data/    IN-AP.json, IN-OR.json, VN.json
+  backend/data/      storms/ (replay JSON), exposure/ (OSM extracts), dem/ (terrain caches),
+                     ai_cache/ (real Gemini outputs), state/ (runtime; git-ignored)
+  backend/scripts/   build_replay, fetch_osm, prepare_tenant, calibrate, prime_ai_cache
+  backend/tests/     6 test modules, 55 tests
+  docs/              DEPLOY.md, SUBMISSION.md, images/, deck/
+  Dockerfile         one-container image for Cloud Run
+
+
+B2. DATA INPUTS AND PROVENANCE
+------------------------------
+
+  Storm tracks      JTWC best-track archive via the UCAR RAL open mirror. Eight storms: Hudhud 2014,
+                    Phailin 2013, Fani 2019, Amphan 2020, Michaung 2023, Montha 2025, ONE-26
+                    (Sep 2026), Yagi 2024.
+  Infrastructure    OpenStreetMap extracts (ODbL) prepared OFFLINE by scripts/fetch_osm.py - the
+                    running app never calls Overpass. Hospitals, substations, power lines, arterial
+                    roads and bridges, candidate shelters, localities.
+  Terrain           AWS/Mapzen Terrarium tiles (SRTM-derived, about 36 m), cached as arrays.
+  Earth Engine      NOAA/GFS0P25 (forecast rain), JRC/GHSL/P2023A/GHS_POP (population),
+                    GOOGLE/Research/open-buildings/v3/polygons (buildings), MERIT/Hydro/v1_0_1
+                    (height above nearest drainage). Deprecated asset IDs were deliberately avoided
+                    (COPERNICUS/DEM/GLO30, FAO/GAUL/2015/level2, SMAP SPL4SMGP/007).
+  Official guidance IMD bulletins, read by Gemini (see B7.4).
+
+Decision: replay storms from best tracks rather than a "live" feed. Reason: live cyclone feeds need
+authorised access and cannot be demonstrated on demand; replays run any time, let judges reproduce
+results, and share the exact pipeline that would consume an official forecast. The cost is
+hindsight: a best track is an after-the-fact analysis, not a forecast, and the ensemble only partly
+represents real forecast error. This is disclosed in the UI and in the deck.
+
+
+B3. STORM INPUT (app/storms/)
+-----------------------------
+
+B3.1 ATCF parser (atcf.py). Parses the ATCF b-deck format: latitude/longitude in tenths of a
+     degree, wind in knots, MSLP, 34/50/64-kt wind radii and radius of maximum wind (RMW); also
+     the JTWC .tcw forecast format.
+B3.2 Averaging periods. JTWC winds are 1-minute sustained, IMD winds are 3-minute; the basis is
+     stored per storm and never silently mixed (1-minute values run a few percent higher).
+B3.3 Track utilities (track.py). Time interpolation; closest approach to the region's focus point,
+     which defines T0 for the "event clock"; what-if scenarios that shift the track cross-track
+     by a distance or scale intensity, scaling pressure consistently (Atkinson-Holland relation).
+B3.4 Why an event clock relative to closest approach: it makes advisories comparable across storms
+     and lines the tool up with IMD's lead-time-based stages.
+
+
+B4. THE HAZARD ENGINE (app/hazard/, app/engine.py)
+--------------------------------------------------
+
+B4.1 Wind (wind.py) - Holland (1980) parametric profile
+     p(r)  = pc + dp * exp(-(Rm/r)^B)
+     Vg(r) = sqrt( (B*dp/rho) * (Rm/r)^B * exp(-(Rm/r)^B) + (r*f/2)^2 ) - r*f/2
+     B     = rho * e * Vg_max^2 / dp, clamped to [1.0, 2.5]
+     Surface wind = 0.85 * Vg (surface reduction factor), rotated 20 degrees inward (inflow),
+     plus 0.5 * the storm's translation vector (right-of-track asymmetry).
+     Rm comes from the best track where present, else a default by intensity (25-60 km).
+     Why Holland: it is the de-facto standard parametric profile, needs only a handful of
+     parameters that a bulletin provides, and is fast enough to evaluate on a grid for nine
+     scenarios interactively. Alternatives (full NWP or a hydrodynamic vortex model) need data and
+     compute we do not have and could not explain to a Collector. The 0.85 / 20 deg / 0.5 constants
+     are standard-practice choices and are listed as assumptions in the app. A unit test checks
+     that the peak matches the reported maximum wind within 5 % and lies at the RMW.
+
+B4.2 Storm surge (surge.py) - screening-level storm-tide budget, per coastal sector
+     storm tide = k * ( inverse barometer + wind set-up ) + tide      (tide: a configured assumption,
+                                                                      default 0.4 m, adjustable in the UI)
+     inverse barometer = 1 cm per hPa of pressure drop at the sector (0.01 m/hPa)
+     wind set-up       = tau * L / (rho_w * g * h)
+     tau               = rho_a * Cd * U_onshore^2
+     Cd                = min( (0.75 + 0.067 U) * 1e-3 , 2.5e-3 )     (Cd saturates at 2.5e-3)
+     L, h              = effective shelf width and mean depth of the sector (hand-set, in tenant
+                         config); U_onshore = wind component pointing inland, obtained from the
+                         gradient of distance-to-sea on the DEM. Only the onshore side of the
+                         track contributes, so surge is asymmetric as in reality.
+     k                 = per-coast calibration multiplier (see B12).
+     Why a budget, not a hydrodynamic model: ADCIRC/SLOSH-class models need bathymetry, meshes and
+     hours of compute, and INCOIS/IMD already run the operational versions. A steady-state budget of
+     the same class as forecasters' nomograms is enough to rank sectors and drive asset thresholds,
+     and every term can be shown to a non-specialist. CLIMADA's TCSurgeBathtub (Xu 2010) is
+     computed only as a cross-check reference.
+
+B4.3 Flooding (inundation.py, dem.py) - sea-connected, distance-attenuated bathtub
+     A cell floods when   elevation < storm_tide - 0.2 m/km * distance_from_sea
+     AND it is hydraulically connected to the sea through other flooded cells (connected-component
+     labelling). A plain bathtub would flood inland depressions the sea cannot reach; connectivity
+     removes those false positives. Water bodies at or below 0 m are excluded; harbours whose
+     entrance is narrower than one cell are merged into the sea. Depth is reported in CLASSES
+     (< 0.5, 0.5-1.5, > 1.5 m) because DEM vertical error (about metres) dominates surge error, so
+     centimetre depths would be false precision.
+     Known bias: the DEM is a surface model, biased high under buildings and trees, so flooding in
+     built-up areas is UNDER-predicted. Stated in the UI and the deck.
+
+B4.4 Rain and pathways (rain.py, pluvial.py)
+     R-CLIPER (Tuleya, DeMaria & Kuligowski 2007): a track-only, radially symmetric rain-rate
+     climatology. The 24-hour maximum is compared with IMD classes: heavy 64.5, very heavy 115.6,
+     extremely heavy 204.5 mm.
+     Terrain: priority-flood depression filling (Barnes, Lehman & Mulla 2014) finds waterlogging
+     basins (closed depressions 0.5-3 m deep; stricter thresholds in flat deltas where DEM noise
+     exceeds shallow depressions); D8 flow accumulation finds runoff corridors (>= 0.5 km2
+     upstream). A "damage pathway" = source (rain) -> water path -> receptor (an asset) -> onset
+     time.
+     Limitation: R-CLIPER has no orography and under-predicts stalled or monsoon-interacting
+     storms (e.g. Michaung over Chennai). It is a scenario prior, not a forecast, so the tool
+     also reads live NOAA GFS rain from Earth Engine as context (B10).
+
+B4.5 Ensemble (engine.py)
+     Nine members: cross-track offset {-40, 0, +40} km x intensity offset {-10, 0, +10} kt. For
+     each asset: "k of 9", the share of scenarios in which it reaches a status. Surge is reported
+     as a range across members. This is a SPREAD, not a calibrated probability, and is labelled.
+     Why 9: a 3 x 3 grid covers the dominant error sources (track and intensity) at nine times
+     the base cost, which the engine can afford interactively; it is a design choice, documented.
+
+B4.6 Performance and caching
+     Simulation results are cached in an in-memory LRU (24 entries) keyed by (tenant, storm,
+     parameters); layers (inundation and pathways PNGs) are served from those results. A warm-up
+     thread pre-computes each tenant's default replay after startup so the first click is instant.
+     One uvicorn worker with threads, because the engine is CPU-bound and holds per-tenant arrays
+     in memory.
+
+
+B5. EXPOSURE AND IMPACT (app/exposure/)
+---------------------------------------
+
+B5.1 Assets. Hospitals, substations, lines, arterial roads/bridges, candidate shelters (schools
+     and halls unless designated), and localities (evacuation origins). Ways are clipped to the
+     study area. OSM coverage is uneven: good for high-voltage lines, main roads and urban
+     hospitals; poor for distribution poles and designated cyclone shelters. Schools and halls are
+     therefore shown as CANDIDATE shelters and capacity is not modelled.
+
+B5.2 Impact rules (impact.py) - explicit, cited thresholds, no learned model
+     Wind bands aligned with IMD classes: gale 62, damaging 89, destructive 118, extreme 167 km/h.
+     Surge depth: 0.3 m makes a road impassable (vehicle-passability threshold after Pregnolato
+     et al. 2017); 0.5 m critical for a substation; 1.0 m critical for a hospital. Rain: IMD
+     heavy/very-heavy over a waterlogging basin -> possible/likely waterlogging.
+     Status is one of ok / watch / at risk / critical, with the reasons and the time of first
+     impact. Shelters are made unusable only by flooding (they exist to ride out wind); non-
+     designated candidates are flagged at extreme wind.
+     Why rules and not machine learning: no labelled outcome data exists for these assets; rules
+     are auditable by officers and defensible; every threshold is visible in the Trust panel.
+
+B5.3 Expected loss ratio (used by finance). Emanuel (2011) sigmoid f = v^3 / (1 + v^3), with
+     v = max(V - V_thresh, 0) / (V_half - V_thresh), V_thresh = 25.7 m/s, V_half = 58.7 m/s for the
+     North Indian Ocean (calibration shipped with CLIMADA; Eberenz, Luthi & Bresch 2021). It is an
+     AGGREGATE expected fraction of exposed value - near zero below about 50 kt - not a structural
+     failure probability for any one building.
+
+B5.4 Evacuation routing (routing.py)
+     NetworkX on the OSM road graph; edge weights from class-based free-flow speeds. Nodes are
+     blocked at flood depth >= 0.3 m or inside waterlogging basins under very heavy rain. A multi-
+     source Dijkstra from all SAFE shelters gives each locality its nearest reachable shelter.
+     "Leave before" = local gale onset - travel time - 1 h buffer. A locality with no route
+     gets an explicit "shelter in place / request assistance" verdict rather than a blank.
+     Why multi-source from shelters: one search serves all localities (fast) and yields the nearest
+     shelter by travel time under the flood-aware graph.
+
+
+B6. THE WARNING TIER: RULES, NOT THE LLM (ai/facts.py: severity())
+------------------------------------------------------------------
+
+     tier = min( IMD stage reached at this lead time , modelled hazard level )
+     IMD stages: Pre-Cyclone Watch (72 h), Cyclone Alert (48 h), Cyclone Warning (24 h),
+     Post-Landfall Outlook (12 h). Output: Monitor / Yellow / Orange / Red.
+
+     Why min(): the stage clock alone would alert for a storm that misses the district; the
+     modelled hazard alone would ignore the institutional warning process. Taking the lower means
+     neither can escalate on its own. The tier sets advisory wording, the number of approvers
+     (two for orange/red) and the finance tier. The LLM never sets severity - a deliberate safety
+     decision, verified by tests and shown on the near-miss replay (Montha 2025: "Monitor").
+
+
+B7. THE AI LAYER (app/ai/)
+--------------------------
+
+B7.1 gemini_client.py - one wrapper for every model call
+     - Model chain: gemini-3.7-flash (the model the track names), then 3.6, then 3.5-flash-lite;
+       the primary ID is configurable (GEMINI_MODEL, GEMINI_FALLBACK_MODELS).
+     - thinking_level set explicitly: Gemini 3 defaults to high (slow and costly for our short
+       structured tasks); MINIMAL is unsupported on 3.7 Flash (HTTP 400), so it is served as LOW.
+     - Temperature left at default (Gemini 3 guidance; lowering it can degrade reasoning).
+     - Structured output via response_schema for drafts and bulletins; automatic function calling
+       for the copilot.
+     - Resilience: retries with a CIRCUIT BREAKER - a model that returns 429/402/503 is skipped for
+       a period rather than hammered - and a 75 s overall budget, so a slow model cannot hang the
+       UI. A trace record (model, latency, tool calls, fallback used) feeds the UI's AI-trace panel.
+     Why one wrapper: retries, tracing, budgets and fallbacks live in one place instead of being
+     re-implemented per feature.
+
+B7.2 facts.py - the FACTS PACKET
+     A JSON object of computed numbers, with an audience-specific view (collector, hospital,
+     power, roads, shelter, fisheries). It is the only source of numbers an advisory may contain.
+     Design choice: rather than trying to make the model "not hallucinate", we remove the need to
+     trust it - anything not in the packet is, by construction, invalid.
+
+B7.3 advisory.py - drafting pipeline
+     facts packet -> Gemini structured draft -> validator -> (optional) translation, validated
+     again -> officer review/approval. If validation fails, ONE retry with the validator's
+     feedback; if it still fails, a deterministic template, labelled "template". Officers may edit;
+     edits are re-validated and clear existing approvals.
+
+B7.4 bulletin.py - multimodal ingestion
+     IMD publishes cyclone bulletins as PDF/PNG only. Gemini extracts a typed schema (Bulletin).
+     Deterministic code then normalises it: km/h -> kt; drops implausible positions (outside
+     0-35 N, 40-110 E) or winds (outside 10-200 kt); orders times; reports every issue. A surge
+     sentence in the bulletin is carried through as OFFICIAL GUIDANCE and shown beside our own
+     estimate. The UI shows extracted-vs-source so an officer can verify the reading.
+
+B7.5 validator.py - deterministic guardrails (every draft AND every translation)
+     (1) Every number appears in the facts packet, is a rounded variant of one, or is a documented
+         threshold. Digits in any script (Telugu, Odia, Devanagari, ...) are normalised first so a
+         translation cannot smuggle in a changed number.
+     (2) Every named place or asset exists in the model output.
+     (3) No URLs, phone numbers, or instruction-like text ("ignore previous instructions").
+     (4) An uncertainty statement is present.
+     (5) The schema is complete.
+     Rationale: a response schema guarantees syntax, not truth; Google's own guidance says to
+     validate values in the application. Untrusted text (bulletins, feeds, OSM names) is treated
+     as data, never as instructions.
+
+B7.6 copilot.py - officer Q&A
+     Gemini with function calling over seven tools: get_overview, list_assets_at_risk,
+     list_road_impacts, evacuation_status, sector_surge, explain_method, draft_advisory_preview.
+     Tools never raise into the model (a wrapper returns an error object); answers are number-
+     checked against tool outputs; there is NO dispatch tool. If the model returns an empty
+     answer, the copilot re-asks with the tool results included.
+
+B7.7 aicache.py - persistent cache of REAL Gemini outputs
+     Problem: model quota, credits or availability can fail exactly when a prototype is being
+     evaluated. Solution: every real output is stored keyed by the SHA-256 of the exact facts
+     packet it was written from. For identical facts it may be served again, RE-VALIDATED against
+     the current facts, and labelled "(cached)" with model and date; it can always be regenerated
+     live. A tampered cache file is rejected by the validator. Nothing is fabricated: with no cache
+     and no working model, the labelled template is used. scripts/prime_ai_cache.py fills the cache.
+
+B7.8 trace.py - ring buffer behind the "AI trace" panel, so every call, fallback and cache hit is
+     visible to a reviewer.
+
+
+B8. DISPATCH (app/dispatch/)
+----------------------------
+
+B8.1 Workflow (workflow.py). State machine DRAFT -> PENDING_APPROVAL -> APPROVED -> DISPATCHED ->
+     ACKED, with REJECTED and CANCELLED. Maker-checker: the approver must differ from the maker;
+     orange and red need two distinct approvers. Illegal transitions are refused server-side, so
+     the UI cannot bypass them.
+
+B8.2 CAP 1.2 (cap.py). Common Alerting Protocol XML in the profile India's SACHET uses (cap:
+     namespace, "sent" with a +05:30 offset, geocode valueName "LGD District Code" when
+     configured). Always status=Exercise and scope=Restricted with our own sender id; the
+     disclaimer is in <note>; includes a recommended area polygon, an optional second <info> in
+     the officer's language, and Cancel messages that reference the original. A structural safety
+     check runs before every dispatch. Why: so an authorised originator could ingest our output,
+     while making it impossible to mistake it for a public alert or to impersonate IMD/SDMA.
+
+B8.3 Channels (channels.py). REAL: Telegram (message + CAP file + inline Acknowledge button; a
+     press marks the advisory acknowledged and is audit-logged; long-polling for local
+     development, webhook on Cloud Run) and an outbound webhook POST (default: the app's own
+     mock DEOC receiver). SIMULATED AND LABELLED: SMS (TRAI DLT gateways), WhatsApp Business and
+     Cell Broadcast, which are telecom/government gated. If a Telegram acknowledgement update
+     cannot be processed, the failure is logged, an audit entry "telegram_ack_failed" is written and
+     the button press is answered so the officer knows.
+
+B8.4 Audit log (audit.py). Append-only JSON lines; entry_n contains hash(entry_(n-1) || payload).
+     verify() recomputes the chain and reports the first broken index. Tamper-EVIDENT against
+     non-re-chained edits; a determined attacker with write access could recompute all later
+     hashes, so production should anchor the chain head in a retention-locked bucket and sign
+     entries with Cloud KMS (roadmap). We deliberately do not call it a blockchain or
+     "tamper-proof".
+
+
+B9. ANTICIPATORY FINANCE (app/finance.py)
+-----------------------------------------
+
+     Design references: CCRIF (parametric payout when MODELLED loss reaches an attachment point) and
+     the IFRC / Bangladesh Red Crescent cyclone Early Action Protocol (pre-agreed funds released on a
+     wind forecast above a threshold at a set lead time).
+     Four cumulative tiers keyed to IMD's stage clock: T0 Readiness 10 %, T1 Alert 35 %, T2
+     Warning 75 %, T3 Landfall 100 % of a pre-arranged pool, each with its hazard condition. The
+     monitor shows which conditions are met, drafts a release-recommendation memo, lists BASIS
+     RISK (a modelled trigger can fire without loss or miss real loss), and requires a human
+     approval. No money moves. The percentages and the pool are ILLUSTRATIVE and labelled so.
+
+
+B10. GOOGLE EARTH ENGINE (app/hazard/gee.py)
+--------------------------------------------
+
+     Adds real-time and satellite-derived context to the open-terrain engine:
+       - live_rain: latest NOAA GFS 0.25-degree run, summing 6-hourly precipitation buckets to give
+         24 h and 72 h totals at the focus point and the maximum in the study area. Coarse (does not
+         resolve the cyclone core): context, not a track-aware forecast.
+       - flood_exposure: population (GHSL P2023A, 100 m) and buildings (Open Buildings v3,
+         confidence >= 0.7) inside the MODELLED flood zone (250 m squares, >= 25 % wet). Read as
+         order-of-magnitude exposure, not a census. (Hudhud replay: about 1,327 people and 318
+         buildings.)
+       - tile_layers: map tiles for GFS rain, MERIT Hydro HAND (< 10 m) and population density.
+     Engineering decisions:
+       - Authentication via Application Default Credentials (Cloud Run service account) or
+         "earthengine authenticate" locally; the Cloud project must be registered for Earth Engine
+         (non-commercial registration used here).
+       - FAILS SOFT: status() explains why EE is unavailable; the rest of the product keeps working.
+       - Non-blocking start: initialisation runs in a background thread; NO_GCE_CHECK avoids a 24 s
+         metadata-server probe off Cloud Run.
+       - Speed: getMapId takes tens of seconds per layer, so the three tile layers are fetched in
+         parallel and cached (globally, since layers are region-independent); a warm-up thread
+         pre-computes rain and tiles after init.
+     Constraint stated openly: Earth Engine is free for non-commercial use only; a state pilot
+     would likely need a paid plan.
+
+
+B11. BACKEND API, STATE AND FRONT END
+-------------------------------------
+
+B11.1 API. FastAPI with OpenAPI docs at /docs. Groups: status (health, gee/status, ai-cache,
+      trace); regions and storms; simulation and layers; trust (methodology, calibration, audit,
+      audit/verify); advisories (draft, edit, submit, approve, reject, dispatch, ack, cancel,
+      cap.xml); AI (copilot, bulletin extract); finance; Earth Engine (summary, tiles); Telegram
+      (webhook, setup, status); mock DEOC. Input is validated with Pydantic (e.g. cross_track_km
+      within +-150, delta_kt -40..+60).
+B11.2 State. Runtime state (advisories.json, and the audit.jsonl chain) is written to files under
+      CYCLONESHIELD_STATE_DIR. That is adequate for a prototype with one instance; production
+      would use Firestore and a retention-locked bucket. Hence Cloud Run --max-instances 1.
+B11.3 Front end. A single-page UI with no build step: Leaflet map with marker clusters; tabs
+      Overview, Assets, Roads & evac, Advisories, Copilot, Finance, Trust; an event clock with
+      T-72/T-48/T-24/T-12 markers; a layer toggle panel; a what-if panel. All inserted text is
+      HTML-escaped. A no-cache (ETag revalidate) middleware ensures a redeploy is never masked by a
+      stale script - added after a stale-cache bug during development.
+      Why no framework/build: fewer moving parts, one container, instant start, and it is easy for
+      reviewers to read.
+
+
+B12. VALIDATION, CALIBRATION AND HONEST LIMITS
+----------------------------------------------
+
+B12.1 Automated tests (55). Cover: parsers (ATCF, .tcw); physics benchmarks (Holland peak vs
+      reported max within 5 % and at the RMW; surge worked examples); API contracts; the validator
+      (rejects invented numbers, injected text, unknown place names); approval rules (maker !=
+      checker; two approvers for orange/red); CAP safety fields; audit tamper detection; finance
+      tiers; bulletin normalisation; the AI cache including tamper rejection; the Telegram
+      acknowledgement flow.
+B12.2 Surge calibration (READ CAREFULLY). Hand-set shelf geometry plus ONE multiplier k per coast,
+      fitted on a single observed event:
+        Andhra Pradesh  - Hudhud 2014, Visakhapatnam tide gauge 1.2-1.4 m  -> k = 2.0
+                          modelled port 1.27 m (nine-scenario range 0.41-1.46 m)
+        Odisha          - Fani 2019, about 1.5 m reported at Puri (INCOIS guidance had been up to
+                          about 4 m)                                          -> k = 0.65
+                          modelled Puri beach 1.53 m (range 0.13-1.71 m)
+        Vietnam         - UNCALIBRATED (k = 1.0)
+      Because k was fitted to these observations, agreement is BY CONSTRUCTION and is NOT a
+      validation. That the two Indian coasts need such different k (2.0 vs 0.65) shows the hand-set
+      shelf width/depth is the weakest part of the surge model. The UI's Trust > Calibration tab
+      states this, and surge is never presented as an official forecast. First item of future work:
+      derive shelf parameters from bathymetry and validate out-of-sample against Sentinel-1 flood
+      extents.
+B12.3 Other limitations, all disclosed in the product: DEM surface bias (built-up flooding
+      under-predicted); R-CLIPER has no orography; OSM gaps (distribution poles, designated
+      shelters; Odisha roads and Vietnam hospitals not yet loaded); shelter capacity, traffic,
+      drainage, tide-locking of outfalls and wave run-up not modelled; wind averaging basis
+      differences; hindsight in replays; loss ratio is an aggregate; media-reported damage figures
+      for past storms are labelled and unverified.
+
+
+B13. TENANTS AND SCALING
+------------------------
+
+     A tenant is a JSON file in tenants_data/: bounding box, focus point, languages, UTC offset
+     and label, coast sectors (lat/lon, shelf width and depth, calibration k), recipient roles,
+     replay storms, calibration event and attribution. Shipped: IN-AP (Visakhapatnam coast: 271
+     hospitals, 88 substations, 3,110 road segments), IN-OR (Puri: 22 hospitals, 4 substations;
+     road layer pending), VN (Hai Phong: 37 substations, 2,943 road segments; hospitals pending).
+     Adding a region: copy a tenant file; run fetch_osm.py <ID> and prepare_tenant.py <ID>;
+     optionally calibrate.py <ID>; restart. No code changes.
+     Why this scales: the core model uses only global inputs (best tracks, open terrain, OSM, Earth
+     Engine), so it is basin-agnostic (North Indian Ocean and West Pacific already run); the
+     India-specific parts (IMD bulletins, LGD codes, CAP profile, IMD stage clock) live at the
+     edges. Pilot pathway (proposal): week 1 shadow mode with one SDMA; weeks 2-3 a second state
+     (file + language pack + data run); week 4 a CAP feed to a state EOC or the SACHET test
+     channel via NDMA; later NCRMP Category II states and BRICS/APAC partners.
+
+
+B14. DEPLOYMENT
+---------------
+
+     - One container, one URL: FastAPI serves the API and the UI, so there is no CORS setup and no
+       API-URL build variable. Image: python:3.11-slim; uvicorn with ONE worker and threads (the
+       engine is CPU-bound and holds per-tenant arrays in memory) and --proxy-headers so
+       request.base_url reflects https behind Cloud Run's TLS termination (needed for the
+       Telegram self-webhook URL).
+     - Deploy from Cloud Shell with "gcloud run deploy --source ." (Cloud Build; no local Docker).
+       Region asia-south1 (Mumbai) for latency to Indian users. Secrets (Gemini key, Telegram
+       token) go in Secret Manager. Earth Engine uses the Cloud Run service account, whose project
+       must be registered for EE. Full steps and troubleshooting: docs/DEPLOY.md.
+     - --max-instances 1 keeps the in-memory simulation cache and the file-based audit chain
+       consistent; production hardening (Firestore, retention-locked bucket, KMS) is on the roadmap.
+
+
+B15. SECURITY AND RESPONSIBLE AI
+--------------------------------
+
+     - Secrets live only in .env (git-ignored) or Cloud Run secrets; a shared key should be rotated.
+     - Human in the loop: the model can draft but never dispatch; dispatch is code behind a maker-
+       checker state machine.
+     - Untrusted text is data, not instructions; injected-instruction, URL and phone patterns are
+       rejected by the validator; UI output is escaped.
+     - CAP safety: always Exercise/Restricted, never an IMD/SDMA sender; checked before dispatch.
+     - No personal data: tenant configs hold role placeholders, not real officials' contacts.
+     - Transparency: every AI call, cache hit, fallback and validation result is visible; every
+       advisory, CAP <note> and screen carries the "not an official warning" disclaimer.
+     - Honest labelling everywhere: screening-level, in-sample calibration, simulated channels,
+       illustrative finance figures.
+
+
+B16. KEY DESIGN DECISIONS AND THE ALTERNATIVES WE DID NOT TAKE
+--------------------------------------------------------------
+
+  Decision                          Chosen                          Not chosen, and why
+  --------------------------------  ------------------------------  ---------------------------------
+  Who produces numbers              Deterministic code              LLM-generated numbers: cannot be
+                                                                    audited; hallucination risk
+  Who sets severity                 Rules (min of IMD stage and     LLM judgement: not reproducible,
+                                    modelled hazard)                unsafe for a public-safety tier
+  How to make AI safe               Facts packet + validator +      Prompt-only "please don't invent":
+                                    human approval                  no guarantee
+  Wind model                        Holland (1980) parametric       Full NWP / vortex model: data and
+                                                                    compute not available on demand
+  Surge model                       Screening budget + per-coast k  ADCIRC/SLOSH: needs bathymetry
+                                                                    and hours of compute; INCOIS/IMD
+                                                                    already operate them
+  Flooding                          Sea-connected bathtub with      Plain bathtub: floods unreachable
+                                    inland attenuation              depressions
+  Depth output                      Classes                         Centimetres: false precision vs
+                                                                    DEM error
+  Impact model                      Explicit cited thresholds       ML damage model: no labelled data;
+                                                                    not auditable
+  Storm input                       Replay + bulletin               Live feed: needs authorised access;
+                                                                    cannot be demonstrated on demand
+  Alert format                      CAP 1.2, Exercise/Restricted    Custom JSON: not interoperable
+  Delivery                          Telegram + webhook real;        Pretending SMS/CB work: dishonest
+                                    SMS/WhatsApp/CB simulated
+  Audit                             Hash-chained log                Plain log: silently editable;
+                                                                    blockchain: unnecessary
+  Front end                         Static SPA, no build            React build: extra tooling with no
+                                                                    benefit at this size
+  Hosting                           One Cloud Run container         Multi-service: more failure modes
+  AI resilience                     Fallback chain, circuit         Single model, no cache: demo dies
+                                    breaker, cache of real output   on quota
+  Regions                           Tenants as JSON                 Hard-coded regions: no scaling
+
+
+B17. THE GOOGLE PRODUCTS USED (AND WHERE)
+-----------------------------------------
+
+  Gemini 3.7 Flash    Bulletin reader (multimodal input + structured output); advisory writer and
+                      translator (structured output); officer copilot (function calling).
+  Google Earth Engine NOAA GFS forecast rain; GHSL population and Open Buildings in the modelled
+                      flood zone; map tiles (GFS rain, MERIT Hydro HAND, population).
+  Cloud Run           Hosts the single container.
+  Cloud Build         Builds the image from source (gcloud run deploy --source .).
+  Secret Manager      Holds API keys and tokens in deployment.
+  Google Cloud project Registered for Earth Engine; provides ADC on Cloud Run.
+
+
+B18. STATUS, KNOWN GAPS AND ROADMAP
+-----------------------------------
+
+  Working end to end on real data and tested (55 tests). Credentialed integrations degrade
+  gracefully: Gemini (template / cached output), Earth Engine (open terrain), Telegram (simulated).
+  Known gaps: Odisha roads and Vietnam hospitals/power layers are missing (Overpass timeouts);
+  the AI cache needs priming when Gemini quota is available; the public deployment and demo video
+  are pending at the time of writing.
+  Roadmap: live forecast ingestion with IMD as the authority; shelf parameters from bathymetry and
+  out-of-sample validation against Sentinel-1; blended NWP rainfall (GFS/ECMWF ensembles) and
+  Google WeatherNext ensembles for the uncertainty cone; designated shelter registers and Health
+  Facility Registry integration; Firestore state and a KMS-signed, bucket-anchored audit chain;
+  SDMA integration through NDMA; Bhashini language adapters and voice bulletins; roof/material
+  classification from photos with Gemini vision.
+
+
+B19. KEY REFERENCES
+-------------------
+
+  Barnes, R., Lehman, C., Mulla, D. (2014). Priority-flood: an optimal depression-filling and
+    watershed-labeling algorithm. Computers & Geosciences 62, 117-127.
+  Eberenz, S., Luthi, S., Bresch, D. N. (2021). Regional tropical cyclone impact functions for
+    globally consistent risk assessments. Nat. Hazards Earth Syst. Sci. 21, 393-415.
+  Emanuel, K. (2011). Global warming effects on U.S. hurricane damage. Weather, Climate, and
+    Society 3, 261-268.
+  Global Commission on Adaptation (2019). Adapt Now: A Global Call for Leadership on Climate
+    Resilience.
+  Holland, G. J. (1980). An analytic model of the wind and pressure profiles in hurricanes. Monthly
+    Weather Review 108, 1212-1218.
+  OASIS (2010). Common Alerting Protocol Version 1.2.
+  Pielke, R. A., Pielke, R. A. (1997). Hurricanes: Their Nature and Impacts on Society. Wiley.
+  Pregnolato, M. et al. (2017). The impact of flooding on road transport: a depth-disruption
+    function. Transportation Research Part D 55, 67-81.
+  Tuleya, R. E., DeMaria, M., Kuligowski, R. J. (2007). Evaluation of GFDL and simple statistical
+    model rainfall forecasts for U.S. landfalling tropical storms. Weather and Forecasting 22, 56-70.
+  World Bank (2023). Odisha's turnaround in disaster management has lessons for the world.
+
+
+B20. GLOSSARY
+-------------
+
+  Storm surge / storm tide  Rise in sea level from a storm's low pressure and onshore wind / the
+                            same plus the normal tide.
+  Landfall / T0             When the storm centre reaches land / the event clock's zero, taken as the
+                            closest approach to the region's focus point.
+  Best track                An agency's after-the-fact analysis of a storm's position and intensity.
+  IMD stages                Pre-Cyclone Watch (72 h), Cyclone Alert (48 h), Cyclone Warning (24 h),
+                            Post-Landfall Outlook (12 h).
+  DEM                       Digital elevation model: a grid of ground heights.
+  Waterlogging basin        A closed low spot where rain water collects.
+  Runoff corridor           A channel where rain water concentrates and flows.
+  CAP                       Common Alerting Protocol, the international XML alert standard used by
+                            NDMA's SACHET platform.
+  SACHET / Web-DCRA         NDMA's CAP-based alert platform / IMD-NDMA's district hazard atlas.
+  SDMA / DEOC / DDMA        State / District Emergency Operations Centre / District Disaster
+                            Management Authority.
+  Maker-checker             One person prepares, a different person approves.
+  Anticipatory action       Releasing pre-agreed funds or actions when a forecast crosses a
+                            threshold, before damage occurs.
+  Basis risk                The chance a trigger fires with no loss, or misses a loss that occurs.
+  Facts packet              The set of computed numbers an advisory is allowed to use.
+  Tenant                    One region's configuration file.
+  Circuit breaker           Logic that temporarily stops calling a failing service.
+
+==============================================================================================
+END OF DOCUMENT
+==============================================================================================

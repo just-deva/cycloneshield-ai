@@ -64,10 +64,25 @@ def _init() -> bool:
                 ee.Initialize(project=project)
             ee.Number(1).getInfo()               # forces a real round-trip so failures surface here
             _STATE.update(initialized=True, error=None, project=project)
+            threading.Thread(target=_warm_data, daemon=True).start()      # pre-compute the slow calls so users never wait on them
             return True
         except Exception as exc:  # noqa: BLE001
             _STATE["error"] = str(exc)[:300]
             return False
+
+
+def _warm_data() -> None:
+    """Background pre-computation after a successful init: live GFS rain per region and the global tile layers (30-90 s cold)."""
+    from ..config import tenants
+    for t in tenants().values():
+        try:
+            live_rain(t)
+        except Exception:  # noqa: BLE001 - warm-up must never crash the service
+            pass
+    try:
+        tile_layers(next(iter(tenants().values())))
+    except Exception:  # noqa: BLE001
+        pass
 
 
 _THREAD: dict[str, Any] = {"t": None}
@@ -182,16 +197,18 @@ def tile_layers(t: Tenant) -> dict:
         rain72 = run.select("total_precipitation_surface").sum()
         hand = ee.Image("MERIT/Hydro/v1_0_1").select("hnd")
         pop = ee.ImageCollection("JRC/GHSL/P2023A/GHS_POP").filterDate("2025-01-01", "2026-01-01").first()
-        def mid(img, vis):
-            return img.getMapId(vis)["tile_fetcher"].url_format
-        return {
-            "gfs_rain_72h": {"label": "GFS forecast rain, next 72 h (mm)", "url": mid(rain72, {"min": 0, "max": 250, "palette": ["#ffffff00", "#93c5fd", "#2563eb", "#7c3aed", "#be123c"]}),
-                             "attribution": "NOAA GFS via Google Earth Engine"},
-            "hand": {"label": "Height above nearest drainage < 10 m (MERIT Hydro)", "url": mid(hand.updateMask(hand.lt(10)), {"min": 0, "max": 10, "palette": ["#7c3aed", "#3b82f6", "#bae6fd"]}),
-                     "attribution": "MERIT Hydro (Yamazaki et al.) via Earth Engine"},
-            "population": {"label": "Population density (GHSL 2025)", "url": mid(pop.updateMask(pop.gt(0)), {"min": 0, "max": 300, "palette": ["#fef3c7", "#f59e0b", "#b91c1c"]}),
-                           "attribution": "JRC GHSL P2023A via Earth Engine"},
+        specs = {
+            "gfs_rain_72h": ("GFS forecast rain, next 72 h (mm)", rain72, {"min": 0, "max": 250, "palette": ["#ffffff00", "#93c5fd", "#2563eb", "#7c3aed", "#be123c"]},
+                             "NOAA GFS via Google Earth Engine"),
+            "hand": ("Height above nearest drainage < 10 m (MERIT Hydro)", hand.updateMask(hand.lt(10)), {"min": 0, "max": 10, "palette": ["#7c3aed", "#3b82f6", "#bae6fd"]},
+                     "MERIT Hydro (Yamazaki et al.) via Earth Engine"),
+            "population": ("Population density (GHSL 2025)", pop.updateMask(pop.gt(0)), {"min": 0, "max": 300, "palette": ["#fef3c7", "#f59e0b", "#b91c1c"]},
+                           "JRC GHSL P2023A via Earth Engine"),
         }
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=3) as ex:            # each getMapId is a separate ~30 s round trip: run them together
+            futs = {k: ex.submit(lambda img=img, vis=vis: img.getMapId(vis)["tile_fetcher"].url_format) for k, (_, img, vis, _) in specs.items()}
+            return {k: {"label": specs[k][0], "url": f.result(), "attribution": specs[k][3]} for k, f in futs.items()}
     if not _init():
         raise RuntimeError(_STATE["error"] or "Earth Engine unavailable")
-    return _cached(f"tiles:{t.id}", compute)
+    return _cached("tiles:global", compute)          # the layers are global, so one cached set serves every region

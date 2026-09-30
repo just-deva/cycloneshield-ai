@@ -239,7 +239,7 @@ The model ID is configurable (`GEMINI_MODEL`, default `gemini-3.7-flash`, the mo
 
 ## 9. Accuracy, validation and honest limitations
 
-**What is checked automatically:** 54 automated tests cover the parsers, physics (for example, the Holland peak matches the reported maximum wind within 5 % and sits at the radius of maximum wind; surge worked examples), the API, the validator (rejecting invented numbers, injected text and unknown names), the approval rules, CAP safety fields, audit tamper detection, finance tiers, bulletin normalisation and the AI cache (including tamper rejection).
+**What is checked automatically:** 55 automated tests cover the parsers, physics (for example, the Holland peak matches the reported maximum wind within 5 % and sits at the radius of maximum wind; surge worked examples), the API, the validator (rejecting invented numbers, injected text and unknown names), the approval rules, CAP safety fields, audit tamper detection, finance tiers, bulletin normalisation and the AI cache (including tamper rejection).
 
 **Surge calibration: read this carefully.** The screening model has hand-set shelf geometry and **one multiplier `k` per coast, calibrated on a single observed event**: Andhra Pradesh on Hudhud 2014 (1.2-1.4 m at the Visakhapatnam tide gauge), giving `k = 2.0`; Odisha on Fani 2019 (about 1.5 m reported; INCOIS guidance days earlier was up to ~4 m), giving `k = 0.65`. Because the multiplier was *fitted* to those observations, agreement with them is **by construction and is not a validation**. The two coasts needing very different multipliers shows that the hand-set shelf geometry is the weak part. Vietnam is **uncalibrated**. The product states all of this in **Trust, Calibration** and never presents surge as an official forecast (IMD/INCOIS run the operational models).
 
@@ -284,7 +284,7 @@ source .venv/bin/activate                 # Windows: .venv\Scripts\activate
 pip install -r requirements-dev.txt
 cp .env.example .env                      # every key is optional (see Configuration)
 uvicorn app.main:app --port 8000          # open http://localhost:8000
-pytest -q                                 # 54 tests, no network needed
+pytest -q                                 # 55 tests, no network needed
 ```
 
 Without any keys the app still runs end to end: advisories use the labelled deterministic template (or cached real Gemini output if present), the copilot and bulletin reader report "Gemini unavailable" clearly, dispatch is simulated and labelled.
@@ -343,8 +343,9 @@ backend/
     tenants_data/  one JSON file per region
   data/            replay storms, OSM extracts (ODbL), terrain + hydrology caches, AI cache
   scripts/         build_replay, fetch_osm, prepare_tenant, calibrate, prime_ai_cache
-  tests/           54 automated tests
-docs/              DEPLOY.md, SUBMISSION.md, images/
+  tests/           55 automated tests
+docs/              DEPLOY.md, SUBMISSION.md, images/, CycloneShield_AI_Pitch_Deck.pptx, deck/ (generator script)
+explanation.txt    The solution explained: plain language first, then every technical decision
 Dockerfile         one-container Cloud Run image
 ```
 
@@ -380,7 +381,7 @@ Dockerfile         one-container Cloud Run image
 
 This repository began as a small UI prototype (four commits on 29 Sep 2026). The hazard engine, exposure pipeline, AI layer, dispatch workflow, tenants and UI were built during the hackathon period on top of that starting point, and the earlier prototype's code has been replaced (see the git history; the original `main` branch preserves it).
 
-**Status:** working end to end on real data and tested (54 tests). Integrations that need credentials degrade gracefully when they are absent: Gemini (template / cached output), Earth Engine (open terrain), Telegram (simulated dispatch). Earth Engine requires the Google Cloud project to be registered for it; Gemini requires a key with available quota.
+**Status:** working end to end on real data and tested (55 tests). Integrations that need credentials degrade gracefully when they are absent: Gemini (template / cached output), Earth Engine (open terrain), Telegram (simulated dispatch). Earth Engine requires the Google Cloud project to be registered for it; Gemini requires a key with available quota.
 
 ## 21. Glossary
 
