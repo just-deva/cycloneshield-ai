@@ -133,6 +133,7 @@ def build_facts(sim: dict, lead_h: float, role: str) -> dict:
                                           "high": s.get("surge_max_m", s["surge_m"]), "central": s["surge_m"],
                                           "peak_time": clock(sim, s["peak_h"])} for s in sim["sectors"]],
                    "why_this_tier": sev["hazard_reasons"]},
+        "official_surge_guidance": sim.get("official_surge"),
         "uncertainty": {"method": "9 what-if scenarios: track 40 km left/right and intensity 10 kt weaker/stronger",
                         "note": "surge figures are screening-level ranges, not an official forecast; official surge guidance comes from IMD/INCOIS",
                         "wind_note": "winds are on the storm source's own averaging basis (see wind_basis)"},

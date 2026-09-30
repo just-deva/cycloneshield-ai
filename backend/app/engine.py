@@ -275,8 +275,8 @@ def _roads(ctx: Context, hz: Hazard, top: int = 60) -> tuple[list[dict], dict]:
         r24 = hz.r24[gi]
         corr = ctx.dem.sample(ctx.hydro["upa_km2"], lat, lon, 0.0) >= 0.5
         basin = ctx.dem.sample(ctx.hydro["basin_f"], lat, lon, 0.0) > 0.5
-        # 0 none, 1 possible (heavy), 2 likely (very heavy) - only where terrain concentrates water
-        pl_seg = np.where(~(basin | corr), 0, np.where(r24 >= I.IMD_VERY_HEAVY, 2, np.where(r24 >= I.IMD_HEAVY, 1, 0)))
+        # 0 none, 1 possible (heavy), 2 likely (very heavy) - only in waterlogging BASINS (roads cross stream corridors on bridges)
+        pl_seg = np.where(~basin, 0, np.where(r24 >= I.IMD_VERY_HEAVY, 2, np.where(r24 >= I.IMD_HEAVY, 1, 0)))
         seg_len = np.hypot(np.diff(lon) * 111.195 * np.cos(np.radians(lat[:-1])), np.diff(lat) * 111.195)
         total_km = float(seg_len.sum())
         if way.arterial:
@@ -300,7 +300,7 @@ def _roads(ctx: Context, hz: Hazard, top: int = 60) -> tuple[list[dict], dict]:
                      "km_affected": round(bad_km, 2), "first_impact_h": first,
                      "cause": ("surge" if cut.any() else "") + ("+" if cut.any() and plk.any() else "") + ("heavy-rain waterlogging" if plk.any() else ""),
                      "_rank": hpr.get(base_hw, 5)})
-        if bad.any() and (way.arterial or base_hw == "tertiary"):
+        if (bad.any() and way.arterial) or cut.any():
             feats.append({"type": "Feature", "properties": {"name": way.name or way.ref, "status": status, "highway": way.highway},
                           "geometry": {"type": "LineString", "coordinates": [[float(x), float(y)] for x, y in way.coords[::2]] + [[float(lon[-1]), float(lat[-1])]]}})
     rows.sort(key=lambda r: (r["_rank"], -(r["km_affected"])))
@@ -393,14 +393,33 @@ def _ensemble(ctx: Context, storm: Storm, tide_m: float) -> tuple[np.ndarray, li
 
 _SIMS: "OrderedDict[str, dict]" = OrderedDict()
 _PNG: dict[str, bytes] = {}
+_DEPTH: dict[str, np.ndarray | None] = {}
 
 
 def _sim_key(tenant_id, storm_id, shift, dkt, tide) -> str:
     return hashlib.sha1(f"{tenant_id}|{storm_id}|{shift}|{dkt}|{tide}".encode()).hexdigest()[:12]
 
 
-def simulate(tenant_id: str, storm: Storm | str, *, cross_track_km: float = 0.0, delta_kt: float = 0.0,
-             tide_m: float | None = None, ensemble: bool = True) -> dict:
+def _official_surge(base: Storm) -> dict | None:
+    """Surge guidance quoted in an official bulletin (read by Gemini). Shown next to our screening-level numbers and given to advisories."""
+    ref = base.reference or {}
+    if base.kind == "bulletin" and (ref.get("surge_text") or ref.get("surge_high_m") is not None):
+        return {"text": ref.get("surge_text"), "low_m": ref.get("surge_low_m"), "high_m": ref.get("surge_high_m"),
+                "source": base.source, "note": "Official guidance overrides our screening-level estimate wherever they differ."}
+    return None
+
+
+_SIM_LOCK = threading.RLock()
+
+
+def simulate(*args, **kwargs) -> dict:
+    """Thread-safe entry point (requests run in a thread pool; the cache and hazard arrays are shared)."""
+    with _SIM_LOCK:
+        return _simulate(*args, **kwargs)
+
+
+def _simulate(tenant_id: str, storm: Storm | str, *, cross_track_km: float = 0.0, delta_kt: float = 0.0,
+              tide_m: float | None = None, ensemble: bool = True) -> dict:
     ctx = get_context(tenant_id)
     base = load_replay(storm) if isinstance(storm, str) else storm
     tide = ctx.tenant.tide_default_m if tide_m is None else tide_m
@@ -435,6 +454,7 @@ def simulate(tenant_id: str, storm: Storm | str, *, cross_track_km: float = 0.0,
                   "summary": base.summary, "peak_kt": st.peak_kt(), "reference": base.reference,
                   "track": [{"t": f.t.isoformat(), "lat": f.lat, "lon": f.lon, "vmax_kt": f.vmax_kt, "mslp_hpa": f.mslp_hpa} for f in st.track]},
         "scenario": {"cross_track_km": cross_track_km, "delta_kt": delta_kt, "tide_m": tide, "ensemble": ensemble},
+        "official_surge": _official_surge(base),
         "t0": hz.t0.isoformat(), "closest_approach_km": round(hz.dmin_km, 1),
         "focus": hz.focus, "timeline": hz.center, "sectors": hz.sector_peak,
         "flooded_km2": round(hz.flooded_km2, 1),
@@ -450,6 +470,7 @@ def simulate(tenant_id: str, storm: Storm | str, *, cross_track_km: float = 0.0,
                    "pathways": f"/api/layers/{tenant_id}/pathways.png"},
     }
     _SIMS[key] = result
+    _DEPTH[key] = hz.depth_grid
     if hz.depth_grid is not None:
         _PNG[key] = INU.depth_png(hz.depth_grid)
     else:
@@ -457,7 +478,12 @@ def simulate(tenant_id: str, storm: Storm | str, *, cross_track_km: float = 0.0,
     while len(_SIMS) > 24:
         old, _ = _SIMS.popitem(last=False)
         _PNG.pop(old, None)
+        _DEPTH.pop(old, None)
     return result
+
+
+def depth_grid_for(sim_id: str):
+    return _DEPTH.get(sim_id)
 
 
 def get_sim(sim_id: str) -> dict | None:

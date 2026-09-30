@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#071521" />
+  <title>CycloneShield AI - asset-level cyclone impact and advisory dispatch</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="/static/css/app.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo" aria-hidden="true">&#127744;</span>
+      <div><h1>CycloneShield AI</h1><small>Asset-level impact forecasting &amp; advisory dispatch - decision support downstream of IMD</small></div>
+    </div>
+    <div class="controls">
+      <label>Region <select id="tenant" aria-label="Region / tenant"></select></label>
+      <label>Storm <select id="storm" aria-label="Storm"></select></label>
+      <button id="btn-bulletin" class="ghost" title="Let Gemini read an official bulletin (PDF / image) into a storm track">Read a bulletin</button>
+      <button id="btn-scenario" class="ghost" title="What-if: shift the track or change intensity">What-if</button>
+      <span id="mode-badge" class="badge">REPLAY</span>
+    </div>
+    <div class="health" id="health" aria-live="polite"></div>
+  </header>
+
+  <div class="banner" id="banner" role="note">
+    Decision-support prototype. <b>Not an official warning</b>: official cyclone warnings come only from IMD; public alerts only from NDMA / SDMAs. Surge and flood layers are screening-level.
+  </div>
+
+  <main class="layout">
+    <section class="mapcol">
+      <div id="map" class="map" role="application" aria-label="Map of storm track, hazards and infrastructure"></div>
+      <div class="maptools" id="maptools"></div>
+      <div class="timeline" id="timeline">
+        <div class="tl-head"><b id="tl-clock">-</b><span id="tl-stage" class="badge">-</span><span id="tl-wind" class="tl-wind"></span></div>
+        <input id="tl-slider" type="range" min="-72" max="12" value="-24" step="1" aria-label="Event clock, hours relative to closest approach" />
+        <div class="tl-marks" id="tl-marks"></div>
+        <div class="tl-presets" id="tl-presets"></div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <nav class="tabs" id="tabs" role="tablist"></nav>
+      <div class="tabbody" id="tabbody" role="tabpanel"></div>
+    </aside>
+  </main>
+
+  <div id="loading" class="loading" hidden><div class="spinner"></div><span id="loading-text">Running simulation...</span></div>
+  <dialog id="modal"><div id="modal-body"></div><form method="dialog"><button class="ghost">Close</button></form></dialog>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script type="module" src="/static/js/app.js"></script>
+</body>
+</html>

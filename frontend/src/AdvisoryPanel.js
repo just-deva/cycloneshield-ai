@@ -1,6 +1,0 @@
-import React from "react";
-export default function AdvisoryPanel({ advisory, language, setLanguage, generate, loading }) {
-  const speak = () => { if (!advisory?.advisory || !("speechSynthesis" in window)) return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(advisory.advisory); utterance.lang = advisory.locale || "en-IN"; window.speechSynthesis.speak(utterance); };
-  const languages = ["English", "Assamese", "Bengali", "Bodo", "Dogri", "Gujarati", "Hindi", "Kannada", "Kashmiri", "Konkani", "Maithili", "Malayalam", "Manipuri", "Marathi", "Nepali", "Odia", "Punjabi", "Sanskrit", "Santhali", "Sindhi", "Tamil", "Telugu", "Urdu"];
-  return <section className="panel"><label>Alert language <select value={language} onChange={(event) => setLanguage(event.target.value)}>{languages.map((name) => <option key={name}>{name}</option>)}</select></label><button className="primary" onClick={generate} disabled={loading}>{loading ? "Generating…" : "Generate advisory"}</button><article className="advisory"><p className="eyebrow">Municipal control room briefing</p><p>{advisory?.advisory || "Select a timeline point to create an evacuation alert."}</p><small>Source: {advisory?.source || "pending"}</small></article><button onClick={speak} disabled={!advisory?.advisory}>🔊 Read Alert Aloud</button></section>;
-}

@@ -24,6 +24,8 @@ STATIC = Path(__file__).resolve().parent / "static"
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    from .hazard import gee
+    gee.warm()
     _warm()
     start_telegram_polling()
     yield
@@ -51,12 +53,17 @@ def _tenant_or_404(tid: str):
         raise HTTPException(404, str(exc)) from exc
 
 
+def _ee_available() -> bool:
+    from .hazard import gee
+    return bool(gee.status()["available"]) if settings().ee_enabled else False
+
+
 @app.get("/api/health")
 def health() -> dict:
     s = settings()
     return {"status": "online", "system": "CycloneShield AI", "version": app.version,
             "features": {"gemini": bool(s.gemini_api_key), "gemini_model": s.gemini_model,
-                         "earth_engine": s.ee_enabled, "telegram": bool(s.telegram_bot_token),
+                         "earth_engine": _ee_available(), "telegram": bool(s.telegram_bot_token),
                          "webhook": bool(s.dispatch_webhook_url)},
             "tenants": list(tenants()), "replay_storms": len(storm_index())}
 
@@ -66,7 +73,8 @@ def list_tenants() -> list[dict]:
     out = []
     for t in tenants().values():
         out.append({"id": t.id, "name": t.name, "country": t.country, "focus": t.focus.model_dump(), "bbox": t.bbox,
-                    "languages": t.languages, "replay_storms": t.replay_storms, "calibrated": t.calibration is not None,
+                    "languages": t.languages, "replay_storms": t.replay_storms, "utc_offset_hours": t.utc_offset_hours, "tz_label": t.tz_label,
+                    "sectors": [{"id": x.id, "lat": x.lat, "lon": x.lon} for x in t.sectors], "calibrated": t.calibration is not None,
                     "authority": t.authority, "recipients": [r.model_dump() for r in t.recipients],
                     "attribution": t.attribution})
     return out

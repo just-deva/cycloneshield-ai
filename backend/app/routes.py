@@ -238,6 +238,57 @@ def ai_trace(n: int = 40) -> list[dict]:
     return trace.recent(n)
 
 
+# ---------------- Earth Engine (fails soft) ----------------
+@router.get("/gee/status")
+def gee_status() -> dict:
+    from .hazard import gee
+    return gee.status(wait=True)
+
+
+@router.get("/gee/summary/{sim_id}")
+def gee_summary(sim_id: str) -> dict:
+    """Live GFS rain + people/buildings in the modelled flood zone, from Earth Engine. Returns available=false with the reason if EE is not connected."""
+    from .config import get_tenant
+    from .hazard import gee
+    sim = _sim(sim_id)
+    t = get_tenant(sim["tenant"]["id"])
+    st = gee.status(wait=True)
+    if not st["available"]:
+        return {"available": False, **st}
+    out: dict = {"available": True, "project": st["project"]}
+    try:
+        out["rain"] = gee.live_rain(t)
+    except Exception as exc:  # noqa: BLE001
+        out["rain_error"] = str(exc)[:200]
+    try:
+        ctx = engine.get_context(t.id)
+        depth = engine.depth_grid_for(sim_id)
+        out["exposure"] = gee.flood_exposure(t, ctx.dem, depth, sim_id) if depth is not None else {"people": 0, "buildings": 0, "note": "No flooded area in this scenario."}
+    except Exception as exc:  # noqa: BLE001
+        out["exposure_error"] = str(exc)[:200]
+    return out
+
+
+@router.get("/gee/tiles/{tenant_id}")
+def gee_tiles(tenant_id: str) -> dict:
+    from .config import get_tenant
+    from .hazard import gee
+    st = gee.status(wait=True)
+    if not st["available"]:
+        return {"available": False, **st}
+    try:
+        return {"available": True, "layers": gee.tile_layers(get_tenant(tenant_id))}
+    except Exception as exc:  # noqa: BLE001
+        return {"available": False, "error": str(exc)[:200]}
+
+
+# ---------------- severity (rule-based tier for a lead time) ----------------
+@router.get("/severity/{sim_id}")
+def severity_at(sim_id: str, lead_h: float = 24) -> dict:
+    from .ai.facts import severity
+    return severity(_sim(sim_id), lead_h)
+
+
 # ---------------- finance ----------------
 @router.get("/finance/{sim_id}")
 def finance_eval(sim_id: str, lead_h: float = 24, pool_crore: float = 10.0) -> dict:

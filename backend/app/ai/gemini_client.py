@@ -84,10 +84,11 @@ def generate(*, purpose: str, contents, system: str | None = None, schema: type[
     s = settings()
     client = _client()
     models = [s.gemini_model, *[m for m in s.gemini_fallbacks if m != s.gemini_model]]
-    level = {"minimal": "MINIMAL", "low": "LOW", "medium": "MEDIUM", "high": "HIGH"}[thinking]
+    # gemini-3.7-flash rejects thinking_level MINIMAL (HTTP 400), so "minimal" is served as LOW
+    level = {"minimal": "LOW", "low": "LOW", "medium": "MEDIUM", "high": "HIGH"}[thinking]
     last_err: Exception | None = None
     entry = trace.record(purpose=purpose, status="running", input=input_summary[:400], model=None, tools=[t.__name__ for t in tools or []])
-    for model in models:
+    for mi, model in enumerate(models):
         cfg: dict[str, Any] = {"thinking_config": types.ThinkingConfig(thinking_level=getattr(types.ThinkingLevel, level))}
         if system:
             cfg["system_instruction"] = system
@@ -99,7 +100,9 @@ def generate(*, purpose: str, contents, system: str | None = None, schema: type[
             cfg["automatic_function_calling"] = types.AutomaticFunctionCallingConfig(maximum_remote_calls=max_tool_calls)
         if media_high and hasattr(types, "MediaResolution"):
             cfg["media_resolution"] = types.MediaResolution.MEDIA_RESOLUTION_HIGH
-        for attempt in range(2):
+        # The mandated model gets more patience (new models see demand spikes: 503 "high demand", 429 on free-tier quota)
+        # before we fall back; fallback models get two tries.
+        for attempt in range(4 if mi == 0 else 2):
             t0 = time.time()
             try:
                 resp = client.models.generate_content(model=model, contents=contents, config=types.GenerateContentConfig(**cfg))
@@ -116,9 +119,13 @@ def generate(*, purpose: str, contents, system: str | None = None, schema: type[
                 last_err = exc
                 msg = str(exc)
                 trace.update(entry["id"], last_error=msg[:300], model=model)
+                if "400" in msg and "hinking" in msg and level != "LOW":
+                    cfg["thinking_config"] = types.ThinkingConfig(thinking_level=types.ThinkingLevel.LOW)   # unsupported level: retry as LOW
+                    level = "LOW"
+                    continue
                 transient = any(k in msg for k in ("429", "500", "502", "503", "504", "timed out", "Timeout", "UNAVAILABLE"))
                 if not transient:
-                    break                      # e.g. 404 model not found / 400 -> try the next model
-                time.sleep(1.5 * (attempt + 1))
+                    break                      # e.g. 404 model not found / other 400 -> try the next model
+                time.sleep(2.0 * (attempt + 1))
     trace.update(entry["id"], status="failed")
     raise GeminiUnavailable(f"all Gemini models failed: {last_err}")

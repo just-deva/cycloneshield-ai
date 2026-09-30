@@ -132,7 +132,7 @@ def translate(draft: dict, facts: dict, language: str) -> tuple[dict | None, dic
               f"place names, do not add or remove information, do not add numbers. Return the same JSON structure.\n" + json.dumps(draft, ensure_ascii=False))
     try:
         for _ in range(2):
-            res = gc.generate(purpose=f"translate:{language}", contents=prompt, schema=AdvisoryDraft, thinking="minimal",
+            res = gc.generate(purpose=f"translate:{language}", contents=prompt, schema=AdvisoryDraft, thinking="low",
                               input_summary=f"translate advisory to {language}")
             if res.parsed is None:
                 continue
