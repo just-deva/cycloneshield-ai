@@ -30,6 +30,9 @@ class GeminiUnavailable(RuntimeError):
     pass
 
 
+_COOL: dict[str, float] = {}      # model -> monotonic-ish wall time until which it is skipped
+
+
 @dataclass
 class GeminiResult:
     text: str = ""
@@ -48,7 +51,7 @@ def available() -> bool:
 def _client():
     if not available():
         raise GeminiUnavailable("GEMINI_API_KEY is not configured")
-    return genai.Client(api_key=settings().gemini_api_key, http_options=types.HttpOptions(timeout=90_000))
+    return genai.Client(api_key=settings().gemini_api_key, http_options=types.HttpOptions(timeout=45_000))
 
 
 def _extract_tool_calls(resp) -> list[dict]:
@@ -83,12 +86,18 @@ def generate(*, purpose: str, contents, system: str | None = None, schema: type[
     """Call Gemini with model fallback. Raises GeminiUnavailable when no model could answer."""
     s = settings()
     client = _client()
-    models = [s.gemini_model, *[m for m in s.gemini_fallbacks if m != s.gemini_model]]
+    configured = [s.gemini_model, *[m for m in s.gemini_fallbacks if m != s.gemini_model]]
+    # circuit breaker: a model that just failed with a quota/overload error is skipped for a while, so one bad minute on the
+    # mandated model costs ONE slow request, not every request. If every model is cooling we try them all anyway.
+    models = [m for m in configured if _COOL.get(m, 0) <= time.time()] or configured
     # gemini-3.7-flash rejects thinking_level MINIMAL (HTTP 400), so "minimal" is served as LOW
     level = {"minimal": "LOW", "low": "LOW", "medium": "MEDIUM", "high": "HIGH"}[thinking]
     last_err: Exception | None = None
+    deadline = time.time() + 75          # hard overall budget per request: the UI must never hang for minutes
     entry = trace.record(purpose=purpose, status="running", input=input_summary[:400], model=None, tools=[t.__name__ for t in tools or []])
     for mi, model in enumerate(models):
+        if time.time() > deadline:
+            break
         cfg: dict[str, Any] = {"thinking_config": types.ThinkingConfig(thinking_level=getattr(types.ThinkingLevel, level))}
         if system:
             cfg["system_instruction"] = system
@@ -102,7 +111,9 @@ def generate(*, purpose: str, contents, system: str | None = None, schema: type[
             cfg["media_resolution"] = types.MediaResolution.MEDIA_RESOLUTION_HIGH
         # The mandated model gets more patience (new models see demand spikes: 503 "high demand", 429 on free-tier quota)
         # before we fall back; fallback models get two tries.
-        for attempt in range(4 if mi == 0 else 2):
+        for attempt in range(3 if mi == 0 else 2):
+            if time.time() > deadline:
+                break
             t0 = time.time()
             try:
                 resp = client.models.generate_content(model=model, contents=contents, config=types.GenerateContentConfig(**cfg))
@@ -113,7 +124,7 @@ def generate(*, purpose: str, contents, system: str | None = None, schema: type[
                 res = GeminiResult(text=text, parsed=parsed, tool_calls=_extract_tool_calls(resp), model=model,
                                    latency_ms=int((time.time() - t0) * 1000), usage=_usage(resp), trace_id=entry["id"])
                 trace.update(entry["id"], status="ok", model=model, latency_ms=res.latency_ms, tool_calls=res.tool_calls,
-                             usage=res.usage, output=(text or "")[:600], fallback_used=(model != models[0]))
+                             usage=res.usage, output=(text or "")[:600], fallback_used=(model != configured[0]))
                 return res
             except Exception as exc:  # noqa: BLE001
                 last_err = exc
@@ -123,9 +134,15 @@ def generate(*, purpose: str, contents, system: str | None = None, schema: type[
                     cfg["thinking_config"] = types.ThinkingConfig(thinking_level=types.ThinkingLevel.LOW)   # unsupported level: retry as LOW
                     level = "LOW"
                     continue
-                transient = any(k in msg for k in ("429", "500", "502", "503", "504", "timed out", "Timeout", "UNAVAILABLE"))
+                if "429" in msg or "RESOURCE_EXHAUSTED" in msg:
+                    _COOL[model] = time.time() + 180          # quota does not recover in seconds: fall back now
+                    break
+                transient = any(k in msg for k in ("500", "502", "503", "504", "timed out", "Timeout", "UNAVAILABLE"))
                 if not transient:
                     break                      # e.g. 404 model not found / other 400 -> try the next model
-                time.sleep(2.0 * (attempt + 1))
+                if attempt == 1 or mi > 0:
+                    _COOL[model] = time.time() + 60           # repeated overload: rest this model briefly
+                    break
+                time.sleep(2.0)
     trace.update(entry["id"], status="failed")
     raise GeminiUnavailable(f"all Gemini models failed: {last_err}")
