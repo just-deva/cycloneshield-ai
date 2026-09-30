@@ -66,7 +66,9 @@ function textBlock(t) {
 
 function detailHtml(a) {
   const loc = a.localized && a.localized.headline && a.language !== "English";
-  const sourceBadge = a.source === "template" ? '<span class="badge" style="background:#4a3b0a;color:#fde68a">TEMPLATE FALLBACK</span>' : `<span class="badge">GEMINI: ${esc(a.source)}</span>`;
+  const sourceBadge = a.source === "template"
+    ? '<span class="badge" style="background:#4a3b0a;color:#fde68a">TEMPLATE FALLBACK</span>'
+    : `<span class="badge" ${a.cached ? 'style="background:#1e293b;color:#cbd5e1" title="Real Gemini output for identical facts, generated ' + esc(a.cached.cached_utc.slice(0, 16)) + ' UTC, re-validated now"' : ""}>GEMINI: ${esc(a.source)}${a.cached ? " " + esc(a.cached.cached_utc.slice(0, 10)) : ""}</span>`;
   const dsp = a.dispatch;
   return `<div class="advisory" data-adv="${esc(a.id)}">
     <div class="row">${tierPill(a.tier)} <span class="badge">${esc(a.status)}</span> ${sourceBadge}
@@ -116,6 +118,12 @@ function wire(el, a) {
   if (a.status === "DISPATCHED" || a.status === "ACKED") {
     act("Acknowledge receipt (simulate)", "ok", () => call("ack"));
     act("Cancel (CAP Cancel)", "danger", () => call("cancel"));
+  }
+  if (a.status === "DRAFT" && (a.cached || a.source === "template")) {
+    act("Regenerate live with Gemini", "ghost", async () => {
+      const n = await api.post("/api/advisories/draft", { sim_id: S.sim.sim_id, lead_h: a.lead_h, role: a.role, language: a.language, actor: S.actor, refresh: true });
+      S.activeAdvisory = n.id;
+    }, false, "Calls the model now (uses quota). If Gemini is unavailable the labelled template is used.");
   }
   act("View CAP XML", "ghost", async () => {
     const xml = await api.get(`/api/advisories/${a.id}/cap.xml`);

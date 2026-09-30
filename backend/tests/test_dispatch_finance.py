@@ -13,6 +13,8 @@ from app.main import app
 
 @pytest.fixture(autouse=True)
 def isolated_state(tmp_path, monkeypatch):
+    from app.ai import aicache
+    monkeypatch.setattr(aicache, "DIR", tmp_path / "ai_cache")
     monkeypatch.setattr(settings(), "state_dir", tmp_path)
     monkeypatch.setattr(settings(), "telegram_bot_token", None)
     monkeypatch.setattr(workflow, "_ADV", {})

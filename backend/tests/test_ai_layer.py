@@ -4,9 +4,15 @@ import pytest
 
 from app import engine
 from app.ai import advisory as adv
+from app.ai import aicache
 from app.ai import gemini_client as gc
 from app.ai.facts import allowed_numbers, build_facts, severity, stage_level
 from app.ai.validator import ascii_digits, validate
+
+
+@pytest.fixture(autouse=True)
+def _isolated_cache(tmp_path, monkeypatch):
+    monkeypatch.setattr(aicache, "DIR", tmp_path / "ai_cache")
 
 
 @pytest.fixture(scope="module")

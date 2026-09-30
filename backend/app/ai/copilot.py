@@ -8,6 +8,7 @@ from __future__ import annotations
 import functools
 
 from ..exposure.impact import METHODOLOGY, STATUS_ORDER
+from . import aicache
 from . import gemini_client as gc
 from .advisory import draft_advisory
 from .facts import clock, severity
@@ -115,9 +116,24 @@ def _numbers_from(obj, acc: set):
             _numbers_from(v, acc)
 
 
-def ask(sim: dict, lead_h: float, question: str, history: list[dict] | None = None) -> dict:
+def _sim_fingerprint(sim: dict, lead_h: float) -> str:
+    import hashlib
+    import json
+    core = {"sim": sim["sim_id"], "lead": lead_h, "focus": sim["focus"], "summary": sim["summary"], "sectors": sim["sectors"],
+            "roads": sim["road_summary"], "evac": sim["evacuation"]["summary"]}
+    return hashlib.sha256(json.dumps(core, sort_keys=True, default=str).encode()).hexdigest()
+
+
+def ask(sim: dict, lead_h: float, question: str, history: list[dict] | None = None, refresh: bool = False) -> dict:
+    fp, qn = _sim_fingerprint(sim, lead_h), " ".join(question.lower().split())
+    if not history and not refresh:
+        hit = aicache.get("copilot", fp, qn)
+        if hit and hit.get("answer"):
+            base = hit["result"]
+            return {**base, "answer": hit["answer"], "cached": {"cached_utc": hit["cached_utc"], "model": base["model"]},
+                    "model": base["model"] + " (cached)"}
     if not gc.available():
-        raise gc.GeminiUnavailable("GEMINI_API_KEY is not configured")
+        raise gc.GeminiUnavailable("GEMINI_API_KEY is not configured and no cached answer exists for this question")
     log: list[dict] = []
     tools = make_tools(sim, lead_h, log)
     convo = ""
@@ -142,6 +158,10 @@ def ask(sim: dict, lead_h: float, question: str, history: list[dict] | None = No
     facts_like = {"n": sorted(allowed)}
     body = re.sub(r"(?m)^\s*\d+[.)]\s+", "", text)          # list numbering is not a fact
     ok, bad = check_numbers(body, {"numbers": facts_like})
-    return {"answer": text, "tool_calls": [{"name": c["name"], "args": c["args"]} for c in log], "model": model,
-            "latency_ms": res.latency_ms, "trace_id": res.trace_id,
-            "numbers_verified": ok, "unverified_numbers": bad, "note": None if ok else "Some numbers in this answer were not returned by a tool; treat them as unverified."}
+    out = {"answer": text, "tool_calls": [{"name": c["name"], "args": c["args"]} for c in log], "model": model,
+           "latency_ms": res.latency_ms, "trace_id": res.trace_id,
+           "numbers_verified": ok, "unverified_numbers": bad,
+           "note": None if ok else "Some numbers in this answer were not returned by a tool; treat them as unverified."}
+    if ok and not history and log:
+        aicache.put("copilot", fp, qn, value={"answer": text, "result": out})
+    return out

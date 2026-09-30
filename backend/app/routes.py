@@ -55,6 +55,7 @@ class DraftRequest(BaseModel):
     language: str = "English"
     actor: str = "Duty officer (maker)"
     use_ai: bool = True
+    refresh: bool = False          # bypass the primed AI cache and call Gemini live
 
 
 class ActorRequest(BaseModel):
@@ -75,7 +76,7 @@ def draft(req: DraftRequest) -> dict:
     sim = _sim(req.sim_id)
     if req.role not in ROLES:
         raise HTTPException(422, f"role must be one of {ROLES}")
-    adv = _gemini(advisory_mod.draft_advisory, sim, req.lead_h, req.role, req.language, use_ai=req.use_ai)
+    adv = _gemini(advisory_mod.draft_advisory, sim, req.lead_h, req.role, req.language, use_ai=req.use_ai, refresh=req.refresh)
     rec = workflow.register({**adv}, sim, req.actor)
     return workflow.public_view(rec)
 
@@ -233,6 +234,12 @@ def audit_verify() -> dict:
     return audit.verify()
 
 
+@router.get("/ai-cache")
+def ai_cache_stats() -> dict:
+    from .ai import aicache
+    return aicache.stats()
+
+
 @router.get("/trace")
 def ai_trace(n: int = 40) -> list[dict]:
     return trace.recent(n)
@@ -315,11 +322,12 @@ class CopilotRequest(BaseModel):
     lead_h: float = 24
     question: str = Field(min_length=2, max_length=800)
     history: list[dict] = Field(default_factory=list)
+    refresh: bool = False
 
 
 @router.post("/copilot")
 def copilot(req: CopilotRequest) -> dict:
-    return _gemini(copilot_mod.ask, _sim(req.sim_id), req.lead_h, req.question, req.history)
+    return _gemini(copilot_mod.ask, _sim(req.sim_id), req.lead_h, req.question, req.history, req.refresh)
 
 
 # ---------------- bulletin ingestion ----------------

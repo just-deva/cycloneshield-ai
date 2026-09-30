@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 from pydantic import BaseModel, Field
 
 from ..config import get_tenant
+from . import aicache
 from . import gemini_client as gc
 from .facts import allowed_numbers, build_facts, severity
 from .validator import THRESHOLDS, check_numbers, validate
@@ -151,26 +152,49 @@ def translate(draft: dict, facts: dict, language: str) -> tuple[dict | None, dic
 _CACHE: dict[tuple, dict] = {}
 
 
-def draft_advisory(sim: dict, lead_h: float, role: str, language: str = "English", *, use_ai: bool = True) -> dict:
+def _label(model: str, cached: bool) -> str:
+    return f"{model} (cached)" if cached else model
+
+
+def draft_advisory(sim: dict, lead_h: float, role: str, language: str = "English", *, use_ai: bool = True, refresh: bool = False) -> dict:
+    """Draft an advisory.
+
+    Order of preference: (1) a cached REAL Gemini output for identical facts (unless refresh=True), (2) a live Gemini call, (3) the labelled
+    deterministic template. Cached entries are re-validated against the current facts before they are served.
+    """
     if role not in ROLE_GUIDE:
         raise KeyError(f"unknown role '{role}'")
     key = (sim["sim_id"], lead_h, role, language, use_ai)
-    if key in _CACHE:
+    if not refresh and key in _CACHE:
         return _CACHE[key]
     facts = build_facts(sim, lead_h, role)
     sev = severity(sim, lead_h)
+    public_facts = {k: v for k, v in facts.items() if k != "known_names"}
+    facts_sha = _hash(public_facts)
     notes: list[str] = []
-    draft, validation, source = None, None, "template"
-    if use_ai and gc.available():
-        try:
-            d, v, model, n = _generate_english(facts, sev)
-            notes += n
-            if d:
-                draft, validation, source = d, v, model
-        except gc.GeminiUnavailable as exc:
-            notes.append(f"Gemini unavailable: {exc}")
-    elif use_ai:
-        notes.append("GEMINI_API_KEY not configured: using the deterministic template")
+    draft, validation, source, cached_info = None, None, "template", None
+
+    if use_ai and not refresh:
+        hit = aicache.get("advisory", facts_sha, role)
+        if hit and hit.get("english"):
+            v = validate(hit["english"], facts)
+            if v["passed"]:
+                draft, validation, source = hit["english"], v, _label(hit["model"], True)
+                cached_info = {"cached_utc": hit["cached_utc"], "model": hit["model"]}
+                notes.append("Served from the primed AI cache: real " + hit["model"] + " output generated " + hit["cached_utc"][:16]
+                             + " UTC for identical facts (sha256 match, re-validated now). Use 'Regenerate live' to call the model again.")
+    if draft is None and use_ai:
+        if gc.available():
+            try:
+                d, v, model, n = _generate_english(facts, sev)
+                notes += n
+                if d:
+                    draft, validation, source = d, v, model
+                    aicache.put("advisory", facts_sha, role, value={"english": d, "model": model})
+            except gc.GeminiUnavailable as exc:
+                notes.append(f"Gemini unavailable: {exc}")
+        else:
+            notes.append("GEMINI_API_KEY not configured: using the deterministic template")
     if draft is None:
         draft = template_draft(facts, sev)
         validation = validate(draft, facts)
@@ -178,10 +202,18 @@ def draft_advisory(sim: dict, lead_h: float, role: str, language: str = "English
     english = draft
     translated, tr_status = None, None
     if language != "English":
-        if source != "template" and gc.available():
-            t_draft, t_val, t_model = translate(draft, facts, language)
-            if t_draft:
-                translated, tr_status = t_draft, {"validation": t_val, "model": t_model}
+        if source != "template":
+            eng_key = json.dumps(english, sort_keys=True)
+            hit = None if refresh else aicache.get("translation", facts_sha, role, language, eng_key)
+            if hit and hit.get("localized"):
+                v = validate(hit["localized"], facts, check_names=False)
+                if v["passed"]:
+                    translated, tr_status = hit["localized"], {"validation": v, "model": _label(hit["model"], True)}
+            if translated is None and gc.available():
+                t_draft, t_val, t_model = translate(english, facts, language)
+                if t_draft:
+                    translated, tr_status = t_draft, {"validation": t_val, "model": t_model}
+                    aicache.put("translation", facts_sha, role, language, eng_key, value={"localized": t_draft, "model": t_model})
         if translated is None:
             tmpl = _LOCAL.get(language)
             if tmpl:
@@ -192,10 +224,10 @@ def draft_advisory(sim: dict, lead_h: float, role: str, language: str = "English
     adv = {
         "id": uuid.uuid4().hex[:12], "sim_id": sim["sim_id"], "role": role, "language": language, "locale": LANG_CODE.get(language, "en-IN"),
         "tier": {k: sev[k] for k in ("level", "name", "colour", "finance_tier", "hazard_reasons", "rule")},
-        "lead_h": lead_h, "english": english, "localized": translated, "source": source,
+        "lead_h": lead_h, "english": english, "localized": translated, "source": source, "cached": cached_info,
         "validation": validation, "translation": tr_status, "notes": notes,
-        "facts_sha256": _hash({k: v for k, v in facts.items() if k != "known_names"}),
-        "facts": {k: v for k, v in facts.items() if k != "known_names"},
+        "facts_sha256": facts_sha,
+        "facts": public_facts,
         "created_utc": datetime.now(timezone.utc).isoformat(),
         "disclaimer": "Decision-support advisory generated with AI from public forecasts and models. Not an official warning; official warnings come from "
                       + get_tenant(sim["tenant"]["id"]).authority["forecaster"] + ".",
