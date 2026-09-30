@@ -14,8 +14,7 @@ async function fillEarthEngine(el, sim) {
   }
   const d = EE.data;
   if (!el.contains(box)) return;
-  if (!d.available) { box.innerHTML = `<div class="warnbox">Earth Engine is not connected on this server${d.error ? ` (${esc(d.error.split("
-")[0].slice(0, 120))})` : ""}. The simulation above runs on open terrain tiles; with Earth Engine connected this panel shows live NOAA GFS forecast rain and the people/buildings inside the modelled flood zone.</div>`; return; }
+  if (!d.available) { box.innerHTML = `<div class="warnbox">Earth Engine is not connected on this server${d.error ? ` (${esc(String(d.error).split(/\r?\n/)[0].slice(0, 120))})` : ""}. The simulation above runs on open terrain tiles; with Earth Engine connected this panel shows live NOAA GFS forecast rain and the people/buildings inside the modelled flood zone.</div>`; return; }
   const r = d.rain, x = d.exposure;
   box.innerHTML = `<div class="cards">
     ${r ? `<div class="card"><div class="k">GFS rain next 24 h / 72 h</div><div class="v">${num(r.focus_24h_mm, 0)} / ${num(r.focus_72h_mm, 0)} mm</div><div class="s">at ${esc(sim.tenant.focus.label)}; max in area ${num(r.max_72h_mm, 0)} mm (72 h)</div></div>` : ""}

@@ -158,6 +158,15 @@ def _warm() -> None:
     threading.Thread(target=run, daemon=True).start()
 
 
+@app.middleware("http")
+async def _revalidate_static(request, call_next):
+    """The UI ships as plain ES modules: make browsers revalidate (ETag) on every load so a redeploy is never masked by a stale cached script."""
+    response = await call_next(request)
+    if request.url.path == "/" or request.url.path.startswith("/static/"):
+        response.headers["Cache-Control"] = "no-cache"
+    return response
+
+
 app.include_router(ops_router)
 
 if STATIC.exists():
